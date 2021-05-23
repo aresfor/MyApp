@@ -1,0 +1,79 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             xmlns:viewmodels="clr-namespace:MyApp.ViewModels"
+             x:Class="MyApp.Views.SongListPageCV"
+             xmlns:android="clr-namespace:Xamarin.Forms.PlatformConfiguration.AndroidSpecific;assembly=Xamarin.Forms.Core">
+    <ContentPage.BindingContext>
+        <viewmodels:SongListViewModel/>
+    </ContentPage.BindingContext>
+    <ContentPage.Content>
+        <Grid Padding="20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            
+        <CollectionView
+            BackgroundColor="Transparent"
+            IsGrouped="True"
+            ItemSizingStrategy="MeasureAllItems"
+            ItemsLayout="VerticalList"
+            ItemsSource="{Binding songGroups}"
+            SelectedItem="{Binding SelectedItem,Mode=TwoWay}"
+            SelectionMode="Single"
+            Grid.Row="0"
+            >
+
+            <CollectionView.EmptyView>
+                <StackLayout Orientation="Vertical">
+                    <Label Text="No song found" HorizontalOptions="CenterAndExpand"/>
+                </StackLayout>
+            </CollectionView.EmptyView>
+
+            <CollectionView.GroupHeaderTemplate>
+                <DataTemplate>
+                        <StackLayout Orientation="Vertical">
+                            <Label Text="{Binding Key}"/>
+                            <Label Text="Group header Hey"/>
+                        </StackLayout>
+
+                </DataTemplate>
+            </CollectionView.GroupHeaderTemplate>
+
+            
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+
+                        <Grid Padding="10">
+                            <Frame CornerRadius="20"
+                               HasShadow="True">
+                                <StackLayout Orientation="Horizontal">
+                                    <Image Source="{Binding Image}"
+                                       Aspect="AspectFill"
+                                           WidthRequest="100"
+                                       BackgroundColor="Blue"/>
+                                    <StackLayout VerticalOptions="Center">
+                                        <Label VerticalOptions="Center"
+                                           FontSize="Large"
+                                           Text="{Binding Singer}">
+                                        </Label>
+                                        <Label VerticalOptions="Center"
+                                           FontSize="Large"
+                                           Text="{Binding Length}">
+                                        </Label>
+                                    </StackLayout>
+
+                                    <Button Text="细节"
+                                        Command="{Binding Source={RelativeSource
+                                    AncestorType={x:Type viewmodels:SongListViewModel}},
+                                    Path=FavouriteCommand}"
+                                        CommandParameter="{Binding .}"/>
+                                </StackLayout>
+                            </Frame>
+                        </Grid>
+                    </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+        </Grid>
+    </ContentPage.Content>
+</ContentPage>

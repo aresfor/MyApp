@@ -1,0 +1,90 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             xmlns:viewmodels="clr-namespace:MyApp.ViewModels" 
+             xmlns:model="clr-namespace:MyApp.Models"
+             x:Class="MyApp.Views.SongListPage"
+             x:DataType="viewmodels:SongListViewModel">
+    <ContentPage.BindingContext>
+        <viewmodels:SongListViewModel />
+    </ContentPage.BindingContext>
+
+    <ListView BackgroundColor="Transparent"
+              ItemsSource="{Binding songGroups}"
+              HasUnevenRows="True"
+              IsGroupingEnabled="True"
+              GroupShortNameBinding="{Binding Key}"
+              GroupDisplayBinding="{Binding Key}"
+              SeparatorColor="Blue"
+              SeparatorVisibility="None"
+              SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
+              IsPullToRefreshEnabled="True"
+              IsRefreshing="{Binding IsBusy,Mode=OneWay}"
+              RefreshCommand="{Binding RefreshCommand}"
+              RefreshControlColor="Orange"
+              CachingStrategy="RecycleElement"
+              x:Name="SongPage">
+        
+        <ListView.ItemTemplate>
+            <DataTemplate x:DataType="model:Song">
+                <ViewCell>
+                    <ViewCell.ContextActions>
+                        <MenuItem Text="Delete"
+                                  Command="{Binding Source={x:Reference SongPage},
+                            Path=BindingContext.FavouriteCommand}"
+                                  CommandParameter="{Binding .}"
+                                  />
+                    </ViewCell.ContextActions>
+                    <Grid Padding="10">
+                        <Frame CornerRadius="20"
+                               HasShadow="True">
+                            <StackLayout Orientation="Horizontal">
+                                <Image Source="{Binding Image}"
+                                       WidthRequest="88"
+                                       HeightRequest="66"
+                                       Aspect="Fill"
+                                       BackgroundColor="Blue"/>
+                                <StackLayout VerticalOptions="Center">
+                                    <Label VerticalOptions="Center"
+                                           FontSize="Large"
+                                           Text="{Binding Singer}">
+                                    </Label>
+                                    <Label VerticalOptions="Center"
+                                           FontSize="Large"
+                                           Text="{Binding Length}">
+                                    </Label>
+                                </StackLayout>
+
+                                <Button Text="细节"
+                                        Command="{Binding Source={RelativeSource
+                                    AncestorType={x:Type viewmodels:SongListViewModel}},
+                                    Path=FavouriteCommand}"
+                                        CommandParameter="{Binding .}"/>
+                            </StackLayout>
+                        </Frame>
+                    </Grid>
+                </ViewCell>
+            </DataTemplate>
+        </ListView.ItemTemplate>
+        <ListView.GroupHeaderTemplate>
+            <DataTemplate>
+                <ViewCell>
+                    <StackLayout Orientation="Vertical">
+                        
+                        <Label Text="Hi"/>
+                    </StackLayout>
+                </ViewCell>
+            </DataTemplate>
+        </ListView.GroupHeaderTemplate>
+        <ListView.Header>
+            <Label Text="Header">
+                
+            </Label>
+        </ListView.Header>
+        <ListView.Footer>
+            <Label Text="Footer">
+                
+            </Label>
+        </ListView.Footer>
+    </ListView>
+</ContentPage>
