@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MyApp.Views;
+using System;
 using Xamarin.Forms;
 
 namespace MyApp
@@ -8,6 +9,9 @@ namespace MyApp
         public AppShell()
         {
             InitializeComponent();
+            //Routing.
+            Routing.RegisterRoute(nameof(LoginPage), typeof(LoginPage));
+            Routing.RegisterRoute(nameof(AdvancedPage), typeof(AdvancedPage));
         }
 
     }

@@ -1,4 +1,4 @@
-﻿using MyApp.Models;
+﻿using MyApp.Shared.Models;
 using MyApp.ViewModels;
 using System;
 using System.Collections.Generic;
@@ -18,7 +18,7 @@ namespace MyApp.Views
         {
             InitializeComponent();
  
-            BindingContext = new SongListViewModel();
+            BindingContext = new InternetSongListViewModel();
 
         }
 

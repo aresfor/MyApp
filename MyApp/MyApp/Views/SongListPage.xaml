@@ -2,19 +2,28 @@
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
              xmlns:viewmodels="clr-namespace:MyApp.ViewModels" 
-             xmlns:model="clr-namespace:MyApp.Models"
+             xmlns:model="clr-namespace:MyApp.Shared.Models" 
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              x:Class="MyApp.Views.SongListPage"
-             x:DataType="viewmodels:SongListViewModel">
+             x:DataType="viewmodels:InternetSongListViewModel"
+             >
     <ContentPage.BindingContext>
-        <viewmodels:SongListViewModel />
+        <viewmodels:InternetSongListViewModel />
     </ContentPage.BindingContext>
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <xct:ItemSelectedEventArgsConverter x:Key="ItemSelectedEventArgsConverter"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
 
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Add" Command="{Binding AddCommand}"/>
+    </ContentPage.ToolbarItems>
+    
     <ListView BackgroundColor="Transparent"
-              ItemsSource="{Binding songGroups}"
+              ItemsSource="{Binding song}"
               HasUnevenRows="True"
-              IsGroupingEnabled="True"
-              GroupShortNameBinding="{Binding Key}"
-              GroupDisplayBinding="{Binding Key}"
+              
               SeparatorColor="Blue"
               SeparatorVisibility="None"
               SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
@@ -23,7 +32,15 @@
               RefreshCommand="{Binding RefreshCommand}"
               RefreshControlColor="Orange"
               CachingStrategy="RecycleElement"
-              x:Name="SongPage">
+              x:Name="SongPage"
+              >
+
+        <ListView.Behaviors>
+            <xct:EventToCommandBehavior
+                EventName="ItemSelected"
+                Command="{Binding SelectedCommand}"
+                EventArgsConverter="{StaticResource ItemSelectedEventArgsConverter}"/>
+        </ListView.Behaviors>
         
         <ListView.ItemTemplate>
             <DataTemplate x:DataType="model:Song">
@@ -31,9 +48,9 @@
                     <ViewCell.ContextActions>
                         <MenuItem Text="Delete"
                                   Command="{Binding Source={x:Reference SongPage},
-                            Path=BindingContext.FavouriteCommand}"
+                            Path=BindingContext.DeleteCommand}"
                                   CommandParameter="{Binding .}"
-                                  />
+                                  IsDestructive="True"/>
                     </ViewCell.ContextActions>
                     <Grid Padding="10">
                         <Frame CornerRadius="20"
@@ -41,23 +58,30 @@
                             <StackLayout Orientation="Horizontal">
                                 <Image Source="{Binding Image}"
                                        WidthRequest="88"
-                                       HeightRequest="66"
-                                       Aspect="Fill"
+                                       Aspect="AspectFit"
                                        BackgroundColor="Blue"/>
                                 <StackLayout VerticalOptions="Center">
                                     <Label VerticalOptions="Center"
                                            FontSize="Large"
+                                           Text="{Binding Name}">
+                                    </Label>
+                                    <Label VerticalOptions="Center"
+                                           FontSize="Medium"
                                            Text="{Binding Singer}">
                                     </Label>
                                     <Label VerticalOptions="Center"
-                                           FontSize="Large"
+                                           FontSize="Small"
                                            Text="{Binding Length}">
+                                    </Label>
+                                    <Label VerticalOptions="Center"
+                                           FontSize="Small"
+                                           Text="{Binding Id}">
                                     </Label>
                                 </StackLayout>
 
                                 <Button Text="细节"
                                         Command="{Binding Source={RelativeSource
-                                    AncestorType={x:Type viewmodels:SongListViewModel}},
+                                    AncestorType={x:Type viewmodels:InternetSongListViewModel}},
                                     Path=FavouriteCommand}"
                                         CommandParameter="{Binding .}"/>
                             </StackLayout>

@@ -4,6 +4,7 @@ using Android.App;
 using Android.Content.PM;
 using Android.Runtime;
 using Android.OS;
+using System.Net;
 
 namespace MyApp.Droid
 {
@@ -12,6 +13,11 @@ namespace MyApp.Droid
     {
         protected override void OnCreate(Bundle savedInstanceState)
         {
+            // You may use ServicePointManager here
+            //ServicePointManager
+            //    .ServerCertificateValidationCallback +=
+            //    (sender, cert, chain, sslPolicyErrors) => true;
+
             base.OnCreate(savedInstanceState);
 
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);

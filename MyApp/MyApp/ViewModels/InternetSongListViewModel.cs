@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace MyApp.ViewModels
 {
-    class SongListViewModel:BaseViewModel
+    class InternetSongListViewModel : BaseViewModel
     {
         public ObservableRangeCollection<Song> song { get; set; }
         public ObservableRangeCollection<Grouping<string, Song>> songGroups { get; }
@@ -23,13 +23,13 @@ namespace MyApp.ViewModels
         public AsyncCommand<Song> DeleteCommand { get; }
 
 
-        public SongListViewModel()
+        public InternetSongListViewModel()
         {
             Title = "Song List";
             song = new ObservableRangeCollection<Song>();
             songGroups = new ObservableRangeCollection<Grouping<string, Song>>();
             //IncreaseCount = new Command(OnIncrease);
-            string imageURL = "https://www.gematsu.com/wp-content/uploads/2014/01/IA-PSV-Game-Init.jpg";
+            //string imageURL = "https://vignette4.wikia.nocookie.net/vocalopedia/images/b/b5/Original.jpg/revision/latest?cb=20160127135538";
 
             //List<Song> list = new List<Song> { new Song("All Along with you", "EGOIST", "3:44",imageURL),
             //new Song("My Drearest","SuperCell","4:22",imageURL)};
@@ -48,7 +48,7 @@ namespace MyApp.ViewModels
         }
         async Task DeleteSong(Song song)
         {
-            await SongService.DeleteSong(song.Id);
+            await InternetSongService.DeleteSong(song.Id);
             await Refresh();
         }
         async Task AddSong(Song song)
@@ -57,7 +57,7 @@ namespace MyApp.ViewModels
             var singer = await Application.Current.MainPage.DisplayPromptAsync("Singer", "SingerMessage");
             var length = await Application.Current.MainPage.DisplayPromptAsync("Length", "length");
 
-            await SongService.AddSong(name, singer, length);
+            await InternetSongService.AddSong(name, singer, length);
             await Refresh();
         }
         async Task Favourite(Song song)
@@ -78,7 +78,7 @@ namespace MyApp.ViewModels
             IsBusy = true;
             await Task.Delay(1000);
             song.Clear();
-            var songs = await SongService.GetSong();
+            var songs = await InternetSongService.GetSong();
             song.AddRange(songs);
             IsBusy = false;
         }

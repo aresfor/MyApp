@@ -5,9 +5,20 @@ VisualStudioVersion = 16.0.31229.75
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyApp.Android", "MyApp\MyApp.Android\MyApp.Android.csproj", "{CDE2FA68-0A84-4879-810A-8517DA9A22DD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MyApp", "MyApp\MyApp\MyApp.csproj", "{3488AA5A-3FD9-4674-8B27-DB2FC7770C9C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyApp", "MyApp\MyApp\MyApp.csproj", "{3488AA5A-3FD9-4674-8B27-DB2FC7770C9C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{BAC4C55B-8302-49F6-8FC9-56A19BAAA448}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MyApp.WebAPI", "WebAPI\MyApp.WebAPI.csproj", "{783425D5-9DE5-4160-927D-4850019E20F9}"
+EndProject
+Project("{D954291E-2A0B-460D-934E-DC6B0785DB48}") = "MyApp.Shared", "MyApp.Shared\MyApp.Shared.shproj", "{C6C5DA3D-0778-4599-8B79-0D0114E3892F}"
 EndProject
 Global
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		MyApp.Shared\MyApp.Shared.projitems*{3488aa5a-3fd9-4674-8b27-db2fc7770c9c}*SharedItemsImports = 5
+		MyApp.Shared\MyApp.Shared.projitems*{783425d5-9de5-4160-927d-4850019e20f9}*SharedItemsImports = 5
+		MyApp.Shared\MyApp.Shared.projitems*{c6c5da3d-0778-4599-8b79-0d0114e3892f}*SharedItemsImports = 13
+	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Release|Any CPU = Release|Any CPU
@@ -25,9 +36,16 @@ Global
 		{3488AA5A-3FD9-4674-8B27-DB2FC7770C9C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3488AA5A-3FD9-4674-8B27-DB2FC7770C9C}.Release|Any CPU.Build.0 = Release|Any CPU
 		{3488AA5A-3FD9-4674-8B27-DB2FC7770C9C}.Release|Any CPU.Deploy.0 = Release|Any CPU
+		{783425D5-9DE5-4160-927D-4850019E20F9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{783425D5-9DE5-4160-927D-4850019E20F9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{783425D5-9DE5-4160-927D-4850019E20F9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{783425D5-9DE5-4160-927D-4850019E20F9}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{C6C5DA3D-0778-4599-8B79-0D0114E3892F} = {BAC4C55B-8302-49F6-8FC9-56A19BAAA448}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {3F005DB7-6D3F-44C4-B452-1F8A4A2327E6}
