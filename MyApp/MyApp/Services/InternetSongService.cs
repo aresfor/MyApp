@@ -28,7 +28,7 @@ namespace MyApp.Services
     class InternetSongService
     {
         //Android localDebug url:"https://10.0.2.2:5001"
-        static string BaseUrl = "https://1.117.156.191:5001";
+        static string BaseUrl = "https://cqupt426.top";
 
         static HttpClient client;
         
@@ -61,7 +61,7 @@ namespace MyApp.Services
         //    return await client.GetAsync()
         //}
         static public async Task<IEnumerable<Song>> GetSong() =>
-            await GetAsync<IEnumerable<Song>>("api/InterNetSong", "getSongs");
+            await GetAsync<IEnumerable<Song>>("api/InternetSong", "getSongs");
         static async Task<T> GetAsync<T>(string url, string key, int mins = 1, bool forceRefresh = false)
         {
             var json = string.Empty;
@@ -101,7 +101,7 @@ namespace MyApp.Services
             };
             var json = JsonConvert.SerializeObject(song);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
-            var response = await client.PostAsync("api/InterNetSong",content);
+            var response = await client.PostAsync("api/InternetSong",content);
             if(!response.IsSuccessStatusCode)
             {
                 //执行无法提交之后的代码

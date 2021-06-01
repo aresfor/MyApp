@@ -33,8 +33,8 @@ namespace WebAPI
             services.Configure<KestrelServerOptions>(
              Configuration.GetSection("Kestrel"));
 
-            services.AddDbContext<MyDbContext>(options =>
-            options.UseSqlServer(Configuration.GetConnectionString("ConnectionString")));
+            services.AddDbContextPool<MyDbContext>(options =>
+            options.UseSqlServer(Configuration["ConnectionStrings:default"]));
 
             //数据库异常筛选器，这里缺少包
             //services.AddDatabaseDeveloperPageExceptionFilter();

@@ -5,10 +5,10 @@
              xmlns:model="clr-namespace:MyApp.Shared.Models" 
              xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              x:Class="MyApp.Views.SongListPage"
-             x:DataType="viewmodels:InternetSongListViewModel"
+             x:DataType="viewmodels:SongListViewModel"
              >
     <ContentPage.BindingContext>
-        <viewmodels:InternetSongListViewModel />
+        <viewmodels:SongListViewModel />
     </ContentPage.BindingContext>
     <ContentPage.Resources>
         <ResourceDictionary>
@@ -81,7 +81,7 @@
 
                                 <Button Text="细节"
                                         Command="{Binding Source={RelativeSource
-                                    AncestorType={x:Type viewmodels:InternetSongListViewModel}},
+                                    AncestorType={x:Type viewmodels:SongListViewModel}},
                                     Path=FavouriteCommand}"
                                         CommandParameter="{Binding .}"/>
                             </StackLayout>

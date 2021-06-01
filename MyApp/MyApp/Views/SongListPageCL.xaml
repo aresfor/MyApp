@@ -1,0 +1,135 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             xmlns:viewmodels="clr-namespace:MyApp.ViewModels"
+             x:Class="MyApp.Views.SongListPageCL"
+             x:DataType="viewmodels:SongListViewModel"
+             xmlns:model="clr-namespace:MyApp.Shared.Models" xmlns:controls="clr-namespace:MyApp.Views"
+             xmlns:android="http://schemas.android.com/apk/res/android" xmlns:xct="http://xamarin.com/schemas/2020/toolkit">
+
+    <ContentPage.BindingContext>
+        <viewmodels:SongListViewModel/>
+    </ContentPage.BindingContext>
+
+    <ContentPage.Resources>
+        
+        <ResourceDictionary>
+            <xct:ItemSelectedEventArgsConverter x:Key="ItemSelectedEventArgsConverter"/>
+        </ResourceDictionary>
+        
+        <DataTemplate 
+            x:Key="Favourite"
+            x:DataType="model:Song">
+            <StackLayout>
+                <Frame
+                            HasShadow="True"
+                       BorderColor="DarkGray"
+                       CornerRadius="5"
+                       Margin="20"
+                       HeightRequest="300"
+                       HorizontalOptions="Center"
+                       VerticalOptions="CenterAndExpand">
+                    <StackLayout Orientation="Vertical">
+                        <Image Source="{Binding Image}"
+                                       Aspect="AspectFill"
+                                       WidthRequest="80"
+                               HeightRequest="60"
+                                       BackgroundColor="Blue"/>
+                        <Label Text="{Binding Name}"
+                                        HorizontalOptions="Center"
+                               VerticalOptions="Center"/>
+                        <Label Text="{Binding Singer}"
+                                        HorizontalOptions="Center"
+                               VerticalOptions="Center"/>
+                        <Label Text="Favourite"/>
+                        
+                    </StackLayout>
+                </Frame>
+            </StackLayout>
+        </DataTemplate>
+
+        <DataTemplate
+            x:Key="Normal"
+            x:DataType="model:Song"
+            >
+            <StackLayout>
+                <SwipeView>
+                    <SwipeView.BottomItems>
+                        <SwipeItems Mode="Execute">
+                            <SwipeItem Text="Delete"
+                       IconImageSource="IA.png"
+                       BackgroundColor="LightPink"
+                        />
+                        </SwipeItems>
+                    </SwipeView.BottomItems>
+                    <!-- Content -->
+                    <Frame
+                            HasShadow="True"
+                       BorderColor="DarkGray"
+                       CornerRadius="5"
+                       Margin="20"
+                       HeightRequest="240"
+                       HorizontalOptions="Center"
+                       VerticalOptions="CenterAndExpand">
+
+                        <StackLayout Orientation="Vertical">
+
+                            <Label Text="{Binding Name}"
+                                        HorizontalOptions="Center"
+                               VerticalOptions="Center"/>
+                            <ImageButton Source="IA.jpg" MinimumWidthRequest="30"
+                               VerticalOptions="Center"
+                               Command="{Binding Source={x:RelativeSource
+                            AncestorType={x:Type viewmodels:SongListViewModel}},
+                            Path=PlayOrPauseCommand}"
+                                     CommandParameter="{Binding Name}"/>
+
+                            <Label Text="{Binding Singer}"
+                                        HorizontalOptions="Center"
+                               VerticalOptions="Center"/>
+                        </StackLayout>
+                    </Frame>
+                </SwipeView>
+            </StackLayout>
+        </DataTemplate>
+
+        <controls:SongDataTemplateSelector 
+            x:Key="SongSelector"
+            FavouriteSong="{StaticResource Favourite}"
+            NormalSong="{StaticResource Normal}"/>
+    </ContentPage.Resources>
+    
+    <ContentPage.Content>
+        <StackLayout>
+        <RefreshView IsRefreshing="{Binding IsBusy, Mode=OneWay}"
+                     Command="{Binding RefreshCommand}">
+            <CarouselView ItemsSource="{Binding song}"
+                      ItemTemplate="{StaticResource SongSelector}"
+                          IsScrollAnimated="True"
+                          IndicatorView="indicatorView"
+                          PeekAreaInsets="100"
+                          IsSwipeEnabled="True"
+                          >
+                    <CarouselView.ItemsLayout>
+                        <LinearItemsLayout 
+                            Orientation="Horizontal"
+                            SnapPointsType="Mandatory"
+                            SnapPointsAlignment="Center"/>
+                    </CarouselView.ItemsLayout>
+                    
+            </CarouselView>
+            
+            
+        </RefreshView>
+            
+            <IndicatorView x:Name="indicatorView"
+                   IndicatorColor="LightGray"
+                   SelectedIndicatorColor="DarkGray"
+                   HorizontalOptions="Center" 
+                           />
+            <Grid>
+                
+            </Grid>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

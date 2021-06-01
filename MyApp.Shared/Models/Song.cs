@@ -6,6 +6,7 @@ namespace MyApp.Shared.Models
     {
         [PrimaryKey,AutoIncrement]
         public int Id { get; set; }
+ 
 
         public string Name { get; set; }
         public string Singer { get; set; }

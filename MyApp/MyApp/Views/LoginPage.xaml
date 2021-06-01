@@ -1,12 +1,83 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             x:Class="MyApp.Views.LoginPage">
+             x:Class="MyApp.Views.LoginPage"
+             Shell.FlyoutBehavior="Disabled"
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="LightSeaGreen">
+
+
     <ContentPage.Content>
+        
         <StackLayout>
-            <Label Text="Welcome to LoginPage!"
-                VerticalOptions="CenterAndExpand" 
-                HorizontalOptions="CenterAndExpand" />
+            <StackLayout Orientation="Horizontal">
+
+                <BoxView Color="LightBlue"
+                     HeightRequest="20"
+                     VerticalOptions="StartAndExpand"
+                     HorizontalOptions="Start"
+                     WidthRequest="50"
+                     Margin="10"/>
+                <BoxView Color="LightCoral"
+                    HeightRequest="20"
+                    VerticalOptions="StartAndExpand"
+                     WidthRequest="50"
+                    HorizontalOptions="Center"
+                    Margin="20"/>
+                <BoxView Color="LightGoldenrodYellow"
+                    HeightRequest="20"
+                    VerticalOptions="StartAndExpand"
+                     WidthRequest="50"
+                    HorizontalOptions="Center"
+                    Margin="10"/>
+                <BoxView Color="LightGreen"
+                    HeightRequest="20"
+                    VerticalOptions="StartAndExpand"
+                     WidthRequest="50"
+                    HorizontalOptions="Center"
+                    Margin="20"/>
+                <BoxView Color="LightSalmon"
+                    HeightRequest="20"
+                    VerticalOptions="StartAndExpand"
+                     WidthRequest="50"
+                    HorizontalOptions="Center"
+                    Margin="10"/>
+            </StackLayout>
+        <StackLayout Orientation="Vertical" 
+                     HorizontalOptions="FillAndExpand"
+                     VerticalOptions="Center"
+                     Padding="40">
+                <Label Text="账户:"
+                   FontSize="Medium"
+                   FontAttributes="Bold"
+                   MinimumWidthRequest="50"
+                   />
+                <Entry  Placeholder="宝，先登录"
+                    MinimumWidthRequest="150"
+                    />
+            <Label Text="密码:"
+                   FontSize="Medium"
+                   FontAttributes="Bold"
+                   MinimumWidthRequest="50"
+                       />
+            <Entry  Placeholder="宝，填密码"
+                        MinimumWidthRequest="150"
+                        IsPassword="True"
+                    />
+            
+                <Polyline/>
+            
+                <Button Text="登录" 
+                        BorderColor="LightSlateGray" 
+                        BorderWidth="3" 
+                        BackgroundColor="LightSalmon"/>
+                <Button Text="注册"
+                        BorderColor="LightSlateGray"
+                        BorderWidth="3"
+                        BackgroundColor="LightSkyBlue"
+                        Clicked="Button_Clicked"
+                        />
+            </StackLayout>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

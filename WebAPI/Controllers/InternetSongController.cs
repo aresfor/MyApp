@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MyApp.Shared.Models;
 using MyApp.WebAPI.Context;
@@ -13,31 +14,42 @@ namespace MyApp.WebAPI.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
+
     public class InternetSongController : ControllerBase
     {
+        public ILogger<InternetSongController> Logger { get; set; }
         static string imageURL = "https://vignette4.wikia.nocookie.net/vocalopedia/images/b/b5/Original.jpg";
         public readonly MyDbContext context;
-        public InternetSongController(MyDbContext myContext)
+        public InternetSongController(MyDbContext myContext,ILogger<InternetSongController> logger)
         {
+            Logger = logger;
             context = myContext;
         }
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Song>>> GetSongAsync()
         {
-            var res = from s in context.Songs.AsNoTracking()
-                      select s;
+            if (context == null )
+            {
+                Logger.LogError("InternetSong::DbConnection::ObjectNotCreated");
+            }
+            if (context.Database.CanConnect())
+            {
+                Logger.LogInformation("InternetSong::DbConnection::Ok");
+            }
+            
+            var res = await context.Songs.ToListAsync();
             if (res == null)
             {
-                return BadRequest();
+                return NoContent();
             }
-            return await res.ToListAsync();
+            return  res;
             //songs.Add(new Song("All Along with you", "EGOIST", "3:44", imageURL));
 
         }
         [HttpGet("{id}")]
         public async Task<ActionResult<Song>> GetSongById(int id)
         {
-            var query = from s in context.Songs.AsNoTracking()
+            var query = from s in context.Songs
                         where s.Id == id
                         select s
                       ;

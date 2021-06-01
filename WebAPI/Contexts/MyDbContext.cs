@@ -12,12 +12,12 @@ namespace MyApp.WebAPI.Context
         : base(options)
         { }
         public DbSet<Song> Songs { get; set; }
-        public DbSet<Account> Accounts { get; set; }
-        //不写也没关系
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<Song>().ToTable("Song");
-            modelBuilder.Entity<Account>().ToTable("Account");
-        }
+        //public DbSet<Account> Accounts { get; set; }
+        ////不写也没关系
+        //protected override void OnModelCreating(ModelBuilder modelBuilder)
+        //{
+        //    modelBuilder.Entity<Song>().ToTable("Song");
+        //    modelBuilder.Entity<Account>().ToTable("Account");
+        //}
     }
 }
