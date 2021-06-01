@@ -9,8 +9,8 @@ using MyApp.WebAPI.Context;
 namespace MyApp.WebAPI.Migrations
 {
     [DbContext(typeof(MyDbContext))]
-    [Migration("20210529160434_init_mig")]
-    partial class init_mig
+    [Migration("20210527092721_init-mig")]
+    partial class initmig
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -41,7 +41,7 @@ namespace MyApp.WebAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Songs");
+                    b.ToTable("Song");
                 });
 #pragma warning restore 612, 618
         }

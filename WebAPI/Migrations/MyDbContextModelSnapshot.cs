@@ -39,7 +39,7 @@ namespace MyApp.WebAPI.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Songs");
+                    b.ToTable("Song");
                 });
 #pragma warning restore 612, 618
         }
