@@ -18,7 +18,7 @@ namespace MyApp.Views
         {
             InitializeComponent();
  
-            BindingContext = new InternetSongListViewModel();
+            BindingContext = new SongListViewModel();
 
         }
 

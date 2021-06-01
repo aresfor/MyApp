@@ -21,8 +21,9 @@ namespace MyApp.ViewModels
         public AsyncCommand<object> SelectedCommand { get; }
         public AsyncCommand<Song> AddCommand { get; }
         public AsyncCommand<Song> DeleteCommand { get; }
+        public ICommand PlayOrPauseCommand { get; }
 
-
+        public MvvmHelpers.Commands.Command InitFreshCommand { get; }
         public SongListViewModel()
         {
             Title = "Song List";
@@ -40,11 +41,23 @@ namespace MyApp.ViewModels
             //songGroups.Add(new Grouping<string, Song>("Favorate 1", new[] { song[1] }));
             //songGroups.Add(new Grouping<string, Song>("Favorate 2", new[] { song[0] }));
 
+            //----AsyncCommand Init-----------
             RefreshCommand = new AsyncCommand(Refresh);
             FavouriteCommand = new AsyncCommand<Song>(Favourite);
             SelectedCommand = new AsyncCommand<object>(Selected);
             AddCommand = new AsyncCommand<Song>(AddSong);
             DeleteCommand = new AsyncCommand<Song>(DeleteSong);
+
+            //-------Command Init---------------
+            PlayOrPauseCommand = new MvvmHelpers.Commands.Command<string>(PlayOrPause);
+            
+            //加载页面的时候就刷新一次列表
+            RefreshCommand.ExecuteAsync();
+        }
+        void  PlayOrPause(string name)
+        {
+            PlayerService.InitPlayer(name);
+            PlayerService.PlayOrPause();
         }
         async Task DeleteSong(Song song)
         {
@@ -76,7 +89,7 @@ namespace MyApp.ViewModels
         {
             //Mode设置为twoWay会自动设置IsBusy=True
             IsBusy = true;
-            await Task.Delay(1000);
+            await Task.Delay(500);
             song.Clear();
             var songs = await SongService.GetSong();
             song.AddRange(songs);
