@@ -1,4 +1,5 @@
-﻿using MonkeyCache.FileStore;
+﻿using Android.Content;
+using MonkeyCache.FileStore;
 using MyApp.Global;
 using Xamarin.Essentials;
 using Xamarin.Forms;
@@ -11,6 +12,7 @@ namespace MyApp
         public App()
         {
             InitializeComponent();
+
             Barrel.ApplicationId = AppInfo.PackageName;
             Client.Init();
             MainPage = new AppShell();

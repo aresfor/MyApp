@@ -7,6 +7,7 @@ using MediaManager;
 using System.Threading.Tasks;
 using System.IO;
 using MyApp.Global;
+using System.Net.Http;
 
 namespace MyApp.Services
 {
@@ -14,6 +15,16 @@ namespace MyApp.Services
     {
         static string PreName = null;
         public static double Length = 0;
+        public static async Task UploadSong(string fileName)
+        {
+            var path = DependencyService.Get<IAssets>().GetMusicPath();
+            var source = Directory.GetFiles(path, fileName);
+            if (source == null)
+                return;
+            FileStream stream = new FileStream(source[0],FileMode.Open);
+            var content = new StreamContent(stream);
+            await Client.client.PostAsync($"api/Play?filename = {fileName}", content);
+        }
         public static async Task SetSong(string name)
         {
             if (PreName == name)
@@ -21,8 +32,9 @@ namespace MyApp.Services
             PreName = name;
             var path = DependencyService.Get<IAssets>().GetMusicPath();
             //匹配！
-            string[] source = Directory.GetFiles(path, name + ".*");
-            
+            //string[] source = Directory.GetFiles(path, name + ".*");
+            string[] source = Directory.GetFiles(path, name);
+
             if (source.Length !=0)
             {
                 try

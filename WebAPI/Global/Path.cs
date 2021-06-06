@@ -15,6 +15,6 @@ namespace MyApp.WebAPI.Global
     {
         public static string MusicPath = "/home/ubuntu/Resources/Music/";
         public static string ResourcePath = "/home/ubuntu/Resources/";
-        public static string ImagePath = "/home/ubuntu/Resources/Image";
+        public static string ImagePath = "/home/ubuntu/Resources/Image/";
     }
 }

@@ -83,7 +83,7 @@
                         Command="{Binding LoginCommand}"
                         CommandParameter="{Binding Source={x:Reference loginName},
                     Path=Text}"
-                        />
+                        Clicked="Button_Clicked"/>
                 <Button Text="注册"
                         BorderColor="LightSlateGray"
                         BorderWidth="3"

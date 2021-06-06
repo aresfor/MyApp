@@ -5,7 +5,7 @@
              xmlns:model="clr-namespace:MyApp.Shared.Models" 
              xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              x:Class="MyApp.Views.LocalSongListPage"
-             x:DataType="viewmodels:SongListViewModel"
+             x:DataType="viewmodels:LocalSongListViewModel"
              Shell.PresentationMode="Modal">
     <ContentPage.BindingContext>
         <viewmodels:LocalSongListViewModel />
@@ -60,16 +60,18 @@
                     </ViewCell.ContextActions>-->
                     <Grid Padding="10">
                         <Frame CornerRadius="20"
-                               HasShadow="True">
+                               HasShadow="True"
+                               HeightRequest="100">
                             <StackLayout Orientation="Horizontal">
                                 <Image Source="{Binding Image}"
-                                       WidthRequest="88"
+                                       WidthRequest="60"
+                                       VerticalOptions="Center"
                                        Aspect="Fill"
                                        BackgroundColor="Blue"/>
                                 <StackLayout VerticalOptions="Center">
                                     <Label VerticalOptions="Center"
                                            FontSize="Large"
-                                           Text="{Binding Name}">
+                                           Text="{Binding DisplayName}">
                                     </Label>
                                     <Label VerticalOptions="Center"
                                            FontSize="Medium"

@@ -88,10 +88,14 @@
     <FlyoutItem Title="SongListPage" Icon="icon_about.png">
         <ShellContent Route="SongListPage" ContentTemplate="{DataTemplate local:SongListPage}" />
     </FlyoutItem>
+    <FlyoutItem Title="LocalSongListPage" Icon="icon_about.png">
+        <ShellContent Route="LocalSongListPage" ContentTemplate="{DataTemplate local:LocalSongListPage}" />
+    </FlyoutItem>
     <FlyoutItem Title="AccountPage" Icon="icon_about.png">
         <ShellContent Route="AccountPage" ContentTemplate="{DataTemplate local:AccountPage}" />
     </FlyoutItem>
     <FlyoutItem Title="AdvancedPage" Icon="icon_about.png">
         <ShellContent Route="AdvancedPage" ContentTemplate="{DataTemplate local:AdvancedPage}" />
     </FlyoutItem>
+    
 </Shell>

@@ -9,7 +9,8 @@ namespace MyApp.Interfaces
     {
         string GetMusicPath();
         //为了查询本地歌曲的信息的必须用ICursor，而Context属于mono.Android，这里引入了这个DLL，不知道这样对不对
-        IList<Song> GetLocalSongs(Context context, string name);
+        IList<Song> GetLocalSongs();
+        //IList<Song> GetLocalSongs();
 
     }
 }
