@@ -19,9 +19,9 @@ namespace MyApp.WebAPI.Controllers
 
         public SongController()
         {
-            List<Song> list = new List<Song> { new Song{Id = 1,Name = "All Along with you", Singer = "EGOIST", Length = "3:44",Image = imageURL },
-            new Song { Id = 2, Name = "All Along with you", Singer = "EGOIST", Length = "3:44", Image = imageURL },
-                new Song { Id = 2, Name = "All Along with you", Singer = "EGOIST", Length = "3:44", Image = imageURL } };
+            List<Song> list = new List<Song> { new Song{SongId = 1,Name = "All Along with you", Singer = "EGOIST", Length = "3:44",Image = imageURL },
+            new Song { SongId = 2, Name = "All Along with you", Singer = "EGOIST", Length = "3:44", Image = imageURL },
+                new Song { SongId = 2, Name = "All Along with you", Singer = "EGOIST", Length = "3:44", Image = imageURL } };
 
             songs.AddRange(list);
         }
@@ -34,7 +34,7 @@ namespace MyApp.WebAPI.Controllers
         [HttpGet("{id}")]
         public Song GetSong(int id)
         {
-            return songs.FirstOrDefault(s => s.Id == id);
+            return songs.FirstOrDefault(s => s.SongId == id);
         }
         [HttpPost]
         public void AddSong([FromBody] Song value)
@@ -44,7 +44,7 @@ namespace MyApp.WebAPI.Controllers
         [HttpPut("{id}")]
         public void UpdateSong(int id, [FromBody]Song value)
         {
-            var song = songs.FirstOrDefault(s => s.Id == id);
+            var song = songs.FirstOrDefault(s => s.SongId == id);
             if (song == null)
                 return;
 
@@ -53,7 +53,7 @@ namespace MyApp.WebAPI.Controllers
         [HttpDelete("{id}")]
         public void DeleteSong(int id)
         {
-            var song = songs.FirstOrDefault(s => s.Id == id);
+            var song = songs.FirstOrDefault(s => s.SongId == id);
             if (song == null)
                 return;
 

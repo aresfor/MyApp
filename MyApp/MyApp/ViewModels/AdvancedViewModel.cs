@@ -5,8 +5,8 @@ using System.Text;
 
 namespace MyApp.ViewModels
 {
-    class SongCLVIewModel:BaseViewModel
+    class AdvancedViewModel: BaseViewModel
     {
-        
+
     }
 }

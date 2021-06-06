@@ -18,9 +18,69 @@ namespace MyApp.WebAPI.Migrations
                 .HasAnnotation("ProductVersion", "5.0.6")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("AccountCollection", b =>
+                {
+                    b.Property<int>("CollecitonsCollectionId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("accountsAccountId")
+                        .HasColumnType("int");
+
+                    b.HasKey("CollecitonsCollectionId", "accountsAccountId");
+
+                    b.HasIndex("accountsAccountId");
+
+                    b.ToTable("AccountCollection");
+                });
+
+            modelBuilder.Entity("CollectionSong", b =>
+                {
+                    b.Property<int>("collectionsCollectionId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("songsSongId")
+                        .HasColumnType("int");
+
+                    b.HasKey("collectionsCollectionId", "songsSongId");
+
+                    b.HasIndex("songsSongId");
+
+                    b.ToTable("CollectionSong");
+                });
+
+            modelBuilder.Entity("MyApp.Shared.Models.Account", b =>
+                {
+                    b.Property<int>("AccountId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("AccountId");
+
+                    b.ToTable("Accounts");
+                });
+
+            modelBuilder.Entity("MyApp.Shared.Models.Collection", b =>
+                {
+                    b.Property<int>("CollectionId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("CollectionId");
+
+                    b.ToTable("Collections");
+                });
+
             modelBuilder.Entity("MyApp.Shared.Models.Song", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("SongId")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
@@ -32,14 +92,46 @@ namespace MyApp.WebAPI.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Singer")
+                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.HasKey("SongId");
 
                     b.ToTable("Songs");
+                });
+
+            modelBuilder.Entity("AccountCollection", b =>
+                {
+                    b.HasOne("MyApp.Shared.Models.Collection", null)
+                        .WithMany()
+                        .HasForeignKey("CollecitonsCollectionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MyApp.Shared.Models.Account", null)
+                        .WithMany()
+                        .HasForeignKey("accountsAccountId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("CollectionSong", b =>
+                {
+                    b.HasOne("MyApp.Shared.Models.Collection", null)
+                        .WithMany()
+                        .HasForeignKey("collectionsCollectionId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("MyApp.Shared.Models.Song", null)
+                        .WithMany()
+                        .HasForeignKey("songsSongId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

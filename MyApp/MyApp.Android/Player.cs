@@ -5,6 +5,8 @@ using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
+using MediaManager;
+using MediaManager.Library;
 using MyApp.Droid;
 using MyApp.Interfaces;
 using System;
@@ -22,18 +24,38 @@ namespace MyApp.Droid
         
         public void Init(string source)
         {
-            if (mediaPlayer == null)
-                mediaPlayer = new MediaPlayer();
-            mediaPlayer.Reset();
-            mediaPlayer.SetDataSource(source);
-            mediaPlayer.Prepare();
+            //if (mediaPlayer == null)
+            //    mediaPlayer = new MediaPlayer();
+            //mediaPlayer.Reset();
+            //mediaPlayer.SetDataSource(source);
+            //mediaPlayer.PrepareAsync();
+            try
+            {
+                CrossMediaManager.Current.Play(source);
+            }catch(Exception ex)
+            {
+                
+            }
         }
-        public void PlayOrPause()
+        public void Play()
         {
-            if (!mediaPlayer.IsPlaying)
-                mediaPlayer.Start();
-            else
-                mediaPlayer.Pause();
+            //mediaPlayer.Start();
+            CrossMediaManager.Current.Play();
+        }
+        public void Pause()
+        {
+            //mediaPlayer.Pause();
+            CrossMediaManager.Current.Pause();
+        }
+        public bool isPlaying()
+        {
+            //return mediaPlayer.IsPlaying;
+            return CrossMediaManager.Current.IsPlaying();
+        }
+        
+        public void SeekTo(int msec)
+        {
+            //mediaPlayer.SeekTo(msec);
         }
     }
 }

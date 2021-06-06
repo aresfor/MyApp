@@ -5,6 +5,7 @@ using Android.Content.PM;
 using Android.Runtime;
 using Android.OS;
 using System.Net;
+using MediaManager;
 
 namespace MyApp.Droid
 {
@@ -19,6 +20,10 @@ namespace MyApp.Droid
             //    (sender, cert, chain, sslPolicyErrors) => true;
 
             base.OnCreate(savedInstanceState);
+
+            //初始化MediaManager
+            CrossMediaManager.Current.Init(this);
+            //CrossMediaManager.Current.AutoPlay = false;
 
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);

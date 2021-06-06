@@ -14,16 +14,38 @@ using Android.Database;
 using Android.Provider;
 using MyApp.Shared.Models;
 using System.IO;
-
+using MediaManager;
+using MediaManager.Library;
 [assembly:Xamarin.Forms.Dependency(typeof(Assets))]
 namespace MyApp.Droid
 {
     public class Assets:IAssets
     {
-        public string GetMusicPath(string name)
+        public string GetMusicPath()
         {
-            var path = Android.OS.Environment.GetExternalStoragePublicDirectory(Android.OS.Environment.DirectoryMusic).ToString();
-            return Path.Combine(path, name) + ".mp3";
+            //var path = Android.OS.Environment.GetExternalStoragePublicDirectory(Android.OS.Environment.DirectoryMusic).ToString();
+            return Android.OS.Environment.DirectoryMusic;
+            //return Path.Combine(path, name);
+        }
+        public IList<Song> GetLocalSongs()
+        {
+            List<Song> songs = new List<Song>();
+            string path = Android.OS.Environment.DirectoryMusic;
+            var files = Directory.GetFiles(path);
+            foreach(var f in files)
+            {
+                MediaItem m = new MediaItem(f);
+                Song song = new Song
+                {
+                    Name = m.FileName,
+                    Image = m.ImageUri,
+                    DisplayName = m.DisplayTitle,
+                    Singer = m.Artist,
+                    Length = m.Duration.ToString()
+                };
+                songs.Add(song);
+            }
+            return songs;
         }
         public IList<Song> GetLocalSongs(Context context, string name)
         {

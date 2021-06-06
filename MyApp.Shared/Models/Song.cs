@@ -1,14 +1,15 @@
 ﻿using SQLite;
+using System.Collections.Generic;
 
 namespace MyApp.Shared.Models
 {
     public class Song
     {
         [PrimaryKey,AutoIncrement]
-        public int Id { get; set; }
- 
-
+        public int SongId { get; set; } 
+        public List<Collection> collections { get; set; }
         public string Name { get; set; }
+        public string DisplayName { get; set; }
         public string Singer { get; set; }
         
         public string Length { get; set; }

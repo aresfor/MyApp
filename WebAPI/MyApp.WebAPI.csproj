@@ -27,6 +27,9 @@
     <Compile Update="Controllers\InternetSongController.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="Controllers\PlayController.cs">
+      <SubType>Code</SubType>
+    </Compile>
   </ItemGroup>
 
   <ProjectExtensions><VisualStudio><UserProperties appsettings_1json__JsonSchema="" /></VisualStudio></ProjectExtensions>

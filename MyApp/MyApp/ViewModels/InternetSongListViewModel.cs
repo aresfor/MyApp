@@ -48,7 +48,7 @@ namespace MyApp.ViewModels
         }
         async Task DeleteSong(Song song)
         {
-            await InternetSongService.DeleteSong(song.Id);
+            await InternetSongService.DeleteSong(song.SongId);
             await Refresh();
         }
         async Task AddSong(Song song)

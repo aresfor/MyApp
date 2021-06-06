@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
+             xmlns:viewmodel="clr-namespace:MyApp.ViewModels"
+             x:Class="MyApp.Views.DetailPage">
+
+    <ContentPage.BindingContext>
+        <viewmodel:DetailViewModel/>
+    </ContentPage.BindingContext>
+    
+    <ContentPage.Content>
+        <StackLayout>
+            <StackLayout Orientation="Horizontal"
+                         HorizontalOptions="Center"
+                       VerticalOptions="Center">
+                <Label Text="歌曲名字"
+                       FontSize="Large"/>
+                <Label Text="{Binding song.Name}"/>
+            </StackLayout>
+            <StackLayout Orientation="Horizontal"
+                         HorizontalOptions="Center"
+                       VerticalOptions="Center">
+                <Label Text="歌手"
+                       FontSize="Large"/>
+                <Label Text="{Binding song.Name}"
+                       FontSize="Large"/>
+            </StackLayout>
+            <StackLayout Orientation="Horizontal"
+                         HorizontalOptions="Center"
+                       VerticalOptions="Center">
+                <Label Text="歌曲长度"
+                       FontSize="Large"/>
+                <Label Text="{Binding song.Name}"
+                       FontSize="Large"/>
+            </StackLayout>
+        </StackLayout>
+    </ContentPage.Content>
+</ContentPage>

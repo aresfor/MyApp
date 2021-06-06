@@ -21,9 +21,9 @@ namespace WebAPI
 
             var songs = new Song[]
             {
-             new Song{Id = 1,Name = "All Along with you", Singer = "EGOIST", Length = "3:44",Image = imageURL },
-            new Song { Id = 2, Name = "All Along with you", Singer = "EGOIST", Length = "3:44", Image = imageURL },
-                new Song { Id = 2, Name = "All Along with you", Singer = "EGOIST", Length = "3:44", Image = imageURL }
+             new Song{SongId = 1,Name = "All Along with you", Singer = "EGOIST", Length = "3:44",Image = imageURL },
+            new Song { SongId = 2, Name = "All Along with you", Singer = "EGOIST", Length = "3:44", Image = imageURL },
+                new Song { SongId = 2, Name = "All Along with you", Singer = "EGOIST", Length = "3:44", Image = imageURL }
             };
 
             context.Songs.AddRange(songs);

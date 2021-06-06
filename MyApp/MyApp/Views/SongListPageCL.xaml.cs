@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
+using FontAwesome;
+using MediaManager;
 
 namespace MyApp.Views
 {
@@ -17,8 +19,19 @@ namespace MyApp.Views
         public SongListPageCL()
         {
             InitializeComponent();
-            BindingContext = new SongListViewModel();
+            //BindingContext = new SongListViewModel();
             
+        }
+
+        private void PlayOrPauseButton_Clicked(object sender, EventArgs e)
+        {
+            var button = sender as Button;
+            if (button == null)
+                button  = FindByName("PlayOrPauseButton") as Button;
+            if(!CrossMediaManager.Current.IsPlaying())
+                button.Text = FontAwesomeIcons.PlayCircle;
+            else
+                button.Text = FontAwesomeIcons.PauseCircle;
         }
     }
     public class SongDataTemplateSelector:DataTemplateSelector

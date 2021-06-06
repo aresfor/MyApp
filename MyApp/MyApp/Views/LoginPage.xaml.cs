@@ -1,4 +1,5 @@
-﻿using System;
+﻿using MyApp.Global;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -15,9 +16,16 @@ namespace MyApp.Views
 		
 		public LoginPage ()
 		{
-			InitializeComponent ();
+			InitializeComponent();
 		}
-		public  void PlayAnim()
+
+        protected override async void OnAppearing()
+        {
+            base.OnAppearing();
+			if (LoginStates.isLogged)
+				 await Route.GoToPage($"//{nameof(SongListPageCL)}");
+        }
+        public  void PlayAnim()
         {
 			Random random = new Random();
 			var start = random.NextDouble();

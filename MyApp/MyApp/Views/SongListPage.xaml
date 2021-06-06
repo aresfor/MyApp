@@ -17,7 +17,8 @@
     </ContentPage.Resources>
 
     <ContentPage.ToolbarItems>
-        <ToolbarItem Text="Add" Command="{Binding AddCommand}"/>
+        <ToolbarItem Text="Add"
+                     Command="{Binding AddCommand}"/>
     </ContentPage.ToolbarItems>
     
     <ListView BackgroundColor="Transparent"
@@ -51,6 +52,11 @@
                             Path=BindingContext.DeleteCommand}"
                                   CommandParameter="{Binding .}"
                                   IsDestructive="True"/>
+                        <MenuItem Text="AddToCollection"
+                                  Command="{Binding Source={x:Reference SongPage},
+                            Path=BindingContext.AddSongToCollectionCommand}"
+                                  CommandParameter="{Binding SongId}"
+                                  />
                     </ViewCell.ContextActions>
                     <Grid Padding="10">
                         <Frame CornerRadius="20"
@@ -58,7 +64,7 @@
                             <StackLayout Orientation="Horizontal">
                                 <Image Source="{Binding Image}"
                                        WidthRequest="88"
-                                       Aspect="AspectFit"
+                                       Aspect="Fill"
                                        BackgroundColor="Blue"/>
                                 <StackLayout VerticalOptions="Center">
                                     <Label VerticalOptions="Center"
@@ -75,7 +81,7 @@
                                     </Label>
                                     <Label VerticalOptions="Center"
                                            FontSize="Small"
-                                           Text="{Binding Id}">
+                                           Text="{Binding SongId}">
                                     </Label>
                                 </StackLayout>
 

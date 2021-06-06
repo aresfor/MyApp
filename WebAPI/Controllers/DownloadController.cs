@@ -23,7 +23,7 @@ namespace MyApp.WebAPI.Controllers
         public async Task<IActionResult> Download(int id)
         {
             var query = from s in context.Songs.AsNoTracking()
-                        where s.Id == id
+                        where s.SongId == id
                         select s
                       ;
             var res = await query.FirstOrDefaultAsync();
@@ -31,7 +31,7 @@ namespace MyApp.WebAPI.Controllers
             {
                 return NotFound();
             }
-            var fileStream = Services.DownloadService.GetReadFileStream("../MusicStore/" + res.Name);
+            var fileStream = Services.StreamService.GetReadFileStream("../MusicStore/" + res.Name);
             return File(fileStream, "application/octet-stream");
         }
     }

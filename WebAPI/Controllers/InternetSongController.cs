@@ -18,7 +18,7 @@ namespace MyApp.WebAPI.Controllers
     public class InternetSongController : ControllerBase
     {
         public ILogger<InternetSongController> Logger { get; set; }
-        static string imageURL = "https://vignette4.wikia.nocookie.net/vocalopedia/images/b/b5/Original.jpg";
+        //static string imageURL = "https://vignette4.wikia.nocookie.net/vocalopedia/images/b/b5/Original.jpg";
         public readonly MyDbContext context;
         public InternetSongController(MyDbContext myContext,ILogger<InternetSongController> logger)
         {
@@ -46,45 +46,63 @@ namespace MyApp.WebAPI.Controllers
             //songs.Add(new Song("All Along with you", "EGOIST", "3:44", imageURL));
 
         }
-        [HttpGet("{id}")]
-        public async Task<ActionResult<Song>> GetSongById(int id)
+        //[HttpGet("{id}")]
+        //public async Task<ActionResult<Song>> GetSongById([FromRoute]int id)
+        //{
+        //    var query = from s in context.Songs
+        //                where s.SongId == id
+        //                select s
+        //              ;
+        //    var res = await query.FirstOrDefaultAsync();
+        //    if (res == null)
+        //    {
+        //        return NotFound();
+        //    }
+        //    return res;
+        //}
+        [HttpGet("{CollectionId}")]
+        public async Task<ActionResult<IEnumerable<Song>>> GetCollectionById([FromRoute] int CollectionId)
         {
-            var query = from s in context.Songs
-                        where s.Id == id
-                        select s
-                      ;
+            var query = from c in context.Collections
+                        where c.CollectionId == CollectionId
+                        select (
+                            from s in c.songs
+                            select s
+                            ) ;
+                      
             var res = await query.FirstOrDefaultAsync();
             if (res == null)
             {
                 return NotFound();
             }
-            return res;
+            return res.ToList();
         }
         [HttpPost]
         public async Task<CreatedAtActionResult> AddSong([FromBody] Song value)
         {
-            var res = context.Add(value);
+            var res = context.Songs.Add(value);
             await context.SaveChangesAsync();
             return CreatedAtAction("AddSong", "api/InternetSong", value);
 
         }
         [HttpPut]
-        public async Task<IActionResult> UpdateSong([FromBody]Song value)
+        public async Task<ActionResult<int>> UpdateSong([FromBody]Song value)
         {
-            var res = context.Update(value);
+            var res = context.Songs.Update(value);
 
             if(res.State == EntityState.Modified)
-                await context.SaveChangesAsync();
+                return await context.SaveChangesAsync();
             else if (res.State == EntityState.Unchanged)
                 return BadRequest();
             return NoContent();
         }
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteSong(int id)
+        public async Task<ActionResult<int>> DeleteSong([FromRoute]int id)
         {
-            var res = context.Remove(id);
+            var song = await context.Songs.FindAsync(id);
+            var res = context.Songs.Remove(song);
             if (res.State == EntityState.Deleted)
-                await context.SaveChangesAsync();
+                return await context.SaveChangesAsync();
             else if (res.State == EntityState.Detached)
                 return BadRequest();
             return NotFound();

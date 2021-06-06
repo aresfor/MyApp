@@ -3,7 +3,8 @@
        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
        xmlns:local="clr-namespace:MyApp.Views"
        Title="MyApp"
-       x:Class="MyApp.AppShell">
+       x:Class="MyApp.AppShell"
+       >
 
     <!--
         The overall app visual hierarchy is defined here, along with navigation.
@@ -78,10 +79,19 @@
         FlyoutDisplayOptions="AsMultipleItems" will create a separate flyout item for each child element    
         https://docs.microsoft.com/dotnet/api/xamarin.forms.shellgroupitem.flyoutdisplayoptions?view=xamarin-forms
     -->
+    <ShellItem Route="LoginPage" FlyoutItemIsVisible="False">
+        <ShellContent ContentTemplate="{DataTemplate local:LoginPage}"/>
+    </ShellItem>
     <FlyoutItem Title="SongListPageCL" Icon="icon_about.png">
         <ShellContent Route="SongListPageCL" ContentTemplate="{DataTemplate local:SongListPageCL}" />
     </FlyoutItem>
     <FlyoutItem Title="SongListPage" Icon="icon_about.png">
         <ShellContent Route="SongListPage" ContentTemplate="{DataTemplate local:SongListPage}" />
+    </FlyoutItem>
+    <FlyoutItem Title="AccountPage" Icon="icon_about.png">
+        <ShellContent Route="AccountPage" ContentTemplate="{DataTemplate local:AccountPage}" />
+    </FlyoutItem>
+    <FlyoutItem Title="AdvancedPage" Icon="icon_about.png">
+        <ShellContent Route="AdvancedPage" ContentTemplate="{DataTemplate local:AdvancedPage}" />
     </FlyoutItem>
 </Shell>

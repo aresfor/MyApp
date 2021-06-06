@@ -42,8 +42,7 @@
 
             
             <CollectionView.ItemTemplate>
-                <DataTemplate>
-
+                    <DataTemplate>
                         <Grid Padding="10">
                             <Frame CornerRadius="20"
                                HasShadow="True">

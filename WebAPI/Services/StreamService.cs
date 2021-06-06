@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace MyApp.WebAPI.Services
 {
-    public static class DownloadService
+    public static class StreamService
     {
-        public  static FileStream GetReadFileStream(string Path)
+        public static FileStream GetReadFileStream(string Path)
         {
             var fileinfo = new FileInfo(Path);
             if(!fileinfo.Exists)

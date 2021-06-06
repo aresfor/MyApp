@@ -10,43 +10,19 @@ using System.Net.Http;
 using Newtonsoft.Json;
 using System.Diagnostics;
 using MonkeyCache.FileStore;
+using MyApp.Global;
+
 namespace MyApp.Services
 {
-    public class datastore
-    {
-        //本地Android调试所用的本地证书
-        public void SetCertificate(ref HttpClient client)
-        {
-        var httpClientHandler = new HttpClientHandler();
-            httpClientHandler.ServerCertificateCustomValidationCallback =
-   (message, cert, chain, errors) => { return true; };
-
-            client = new HttpClient(httpClientHandler);
-        }
-        
-    }
+    
     class InternetSongService
     {
-        //Android localDebug url:"https://10.0.2.2:5001"
-        static string BaseUrl = "https://cqupt426.top";
-
-        static HttpClient client;
         
         static string imageURL = "https://vignette4.wikia.nocookie.net/vocalopedia/images/b/b5/Original.jpg";
 
-        static InternetSongService()
+        public InternetSongService()
         {
-            //本地证书
-            //datastore d = new datastore();
-            //d.SetCertificate(ref client);
-            //client.BaseAddress = new Uri(BaseUrl);
-
-
-            client = new HttpClient()
-            {
-                BaseAddress = new Uri(BaseUrl)
-            };
-
+            
 
         }
 
@@ -60,8 +36,10 @@ namespace MyApp.Services
         //{
         //    return await client.GetAsync()
         //}
+        static public async Task<IEnumerable<Song>> GetSongByCollectionId(int CollectionId) =>
+            await GetAsync<IEnumerable<Song>>("api/InternetSong/" + CollectionId.ToString(), "getSongsByCollectionId", 1, true);
         static public async Task<IEnumerable<Song>> GetSong() =>
-            await GetAsync<IEnumerable<Song>>("api/InternetSong", "getSongs");
+            await GetAsync<IEnumerable<Song>>("api/InternetSong", "getSongs",1,true);
         static async Task<T> GetAsync<T>(string url, string key, int mins = 1, bool forceRefresh = false)
         {
             var json = string.Empty;
@@ -75,7 +53,7 @@ namespace MyApp.Services
             {
                 if (string.IsNullOrWhiteSpace(json))
                 {
-                    json = await client.GetStringAsync(url);
+                    json = await Client.client.GetStringAsync(url);
 
                     Barrel.Current.Add(key, json, TimeSpan.FromMinutes(mins));
                 }
@@ -101,7 +79,7 @@ namespace MyApp.Services
             };
             var json = JsonConvert.SerializeObject(song);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
-            var response = await client.PostAsync("api/InternetSong",content);
+            var response = await Client.client.PostAsync("api/InternetSong",content);
             if(!response.IsSuccessStatusCode)
             {
                 //执行无法提交之后的代码
@@ -111,7 +89,7 @@ namespace MyApp.Services
         {
             var json = JsonConvert.SerializeObject(song);
             var content = new StringContent(json, Encoding.UTF8, "application/json");
-            var response = await client.PutAsync("api/InterNetSong", content);
+            var response = await Client.client.PutAsync("api/InterNetSong", content);
             if(!response.IsSuccessStatusCode)
             {
                 //执行无法更新之后的代码
@@ -120,7 +98,7 @@ namespace MyApp.Services
         }
         static public async Task DeleteSong(int id)
         {
-            var response = await client.DeleteAsync($"api/InterNetSong/{id}");
+            var response = await Client.client.DeleteAsync($"api/InterNetSong/{id}");
             if(!response.IsSuccessStatusCode)
             {
                 //执行无法提交之后的代码
