@@ -6,6 +6,7 @@ using Android.Runtime;
 using Android.OS;
 using System.Net;
 using MediaManager;
+using Sharpnado.Presentation.Forms.Droid;
 
 namespace MyApp.Droid
 {
@@ -26,6 +27,9 @@ namespace MyApp.Droid
             //CrossMediaManager.Current.AutoPlay = false;
 
             Xamarin.Essentials.Platform.Init(this, savedInstanceState);
+            //Sharpnado Init in Droid platform.
+            //Droid Init must before LoadApplication and  Xamarin.Forms.Forms.Init
+            SharpnadoInitializer.Initialize();
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
             LoadApplication(new App());
         }

@@ -12,9 +12,17 @@ namespace MyApp
         public App()
         {
             InitializeComponent();
+            //Sharpnado Init
+            Sharpnado.Tabs.Initializer.Initialize(loggerEnable: true,debugLogEnable:false);
 
+
+            //MonkeyCache Init
             Barrel.ApplicationId = AppInfo.PackageName;
+
+
+            //Single static client Init
             Client.Init();
+
             MainPage = new AppShell();
         }
 

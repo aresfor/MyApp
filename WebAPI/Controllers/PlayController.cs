@@ -51,11 +51,15 @@ namespace MyApp.WebAPI.Controllers
             List<Song> songs = new List<Song>();
             var MusicPath = Global.Path.MusicPath;
             var path = Directory.GetFiles(MusicPath);
+            
             //FileInfo f = null;
-            foreach(var p in path)
+            foreach (var p in path)
             {
                 TagLib.File tagFile = TagLib.File.Create(p);
                 //f = new FileInfo(p);
+                var bytes = tagFile.Tag.Pictures[0].Data.Data;
+                string imagePath = Global.Path.ImagePath + tagFile.Name;
+                System.IO.File.WriteAllBytes(imagePath, bytes);
                 songs.Add(new Song
                 {
                     Name = tagFile.Name,

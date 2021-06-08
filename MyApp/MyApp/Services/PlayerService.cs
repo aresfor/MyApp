@@ -34,7 +34,9 @@ namespace MyApp.Services
             //匹配！
             //string[] source = Directory.GetFiles(path, name + ".*");
             string[] source = Directory.GetFiles(path, name);
-
+            
+            if (CrossMediaManager.Current.IsPlaying())
+                await CrossMediaManager.Current.Stop();
             if (source.Length !=0)
             {
                 try

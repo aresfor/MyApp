@@ -23,16 +23,13 @@ namespace MyApp.Views
             
         }
 
-        private void PlayOrPauseButton_Clicked(object sender, EventArgs e)
-        {
-            var button = sender as Button;
-            if (button == null)
-                button  = FindByName("PlayOrPauseButton") as Button;
-            if(!CrossMediaManager.Current.IsPlaying())
-                button.Text = FontAwesomeIcons.PlayCircle;
-            else
-                button.Text = FontAwesomeIcons.PauseCircle;
-        }
+        //private void PlayOrPauseButton_Clicked(object sender, EventArgs e)
+        //{
+        //    if(!CrossMediaManager.Current.IsPlaying())
+        //        PlayOrPauseButton.Text = FontAwesomeIcons.PlayCircle;
+        //    else
+        //        PlayOrPauseButton.Text = FontAwesomeIcons.PauseCircle;
+        //}
     }
     public class SongDataTemplateSelector:DataTemplateSelector
     {

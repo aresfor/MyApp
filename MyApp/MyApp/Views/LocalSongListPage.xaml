@@ -64,7 +64,8 @@
                                HeightRequest="100">
                             <StackLayout Orientation="Horizontal">
                                 <Image Source="{Binding Image}"
-                                       WidthRequest="60"
+                                       WidthRequest="100"
+                                       HeightRequest="100"
                                        VerticalOptions="Center"
                                        Aspect="Fill"
                                        BackgroundColor="Blue"/>

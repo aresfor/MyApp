@@ -9,7 +9,9 @@
              xmlns:model="clr-namespace:MyApp.Shared.Models" 
              xmlns:controls="clr-namespace:MyApp.Views"
              xmlns:android="http://schemas.android.com/apk/res/android" 
-             xmlns:xct="http://xamarin.com/schemas/2020/toolkit">
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+             xmlns:skia="clr-namespace:SkiaSharp;assembly=SkiaSharp" 
+             xmlns:widget="clr-namespace:Android.Widget;assembly=Mono.Android">
 
     <ContentPage.BindingContext>
         <viewmodels:SongListViewModelCL/>
@@ -89,7 +91,7 @@
                             AncestorType={x:Type viewmodels:SongListViewModelCL}},
                             Path=SetSongCommand}"
                                      CommandParameter="{Binding Name}"
-                                         Clicked="PlayOrPauseButton_Clicked"/>
+                                        />
 
                                 <Label Text="{Binding Singer}"
                                         HorizontalOptions="Center"
@@ -105,6 +107,9 @@
             FavouriteSong="{StaticResource Favourite}"
             NormalSong="{StaticResource Normal}"/>
         
+        <!--<controls:ButtonIconSelector
+            x:Key="IconSelector"
+            PlayIcon="{StaticResource }"-->
     </ContentPage.Resources>
 
 
@@ -189,8 +194,9 @@
                     </CarouselView.ItemsLayout>
 
                 </CarouselView>
+                
             </RefreshView>
-
+            
             <StackLayout Orientation="Vertical"
                          BackgroundColor="DarkSeaGreen">
                 <Slider MinimumTrackColor="Blue"
@@ -209,11 +215,12 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="100"/>
                         <ColumnDefinition Width="20"/>
-                        
+
                         <ColumnDefinition Width="60"/>
                         <ColumnDefinition Width="80"/>
                         <ColumnDefinition Width="60"/>
                         <ColumnDefinition Width="80"/>
+                        <ColumnDefinition Width="60"/>
 
                         <ColumnDefinition Width="20"/>
 
@@ -223,16 +230,32 @@
                     <ImageButton WidthRequest="50"
                                  HeightRequest="50"
                                  Aspect="Fill"
-                                 Source="IA.png"
+                                 Source="{Binding SeekBarIconSource}"
                                  CornerRadius="10"/>
-                    <Button Text="{x:Static fontAwesome:FontAwesomeIcons.PlayCircle}"
+                    <!--{x:Static fontAwesome:FontAwesomeIcons.PlayCircle}-->
+                    <Button Text="{x:Static fontAwesome: FontAwesomeIcons.PlayCircle}"
                             Grid.Column="3"
                             FontFamily="FAR"
                             FontSize="40"
                             x:Name="PlayOrPauseButton"
                             Command="{Binding PlayOrPauseCommand}"
-                            CommandParameter="{Binding }"
-                            Clicked="PlayOrPauseButton_Clicked"/>
+                           >
+                        <Button.Triggers>
+                            <DataTrigger
+                                Binding="{Binding IsPlaying}"
+                                TargetType="Button"
+                                Value="True">
+                                <Setter Property="Text" Value="{StaticResource PauseIcon}"/>
+                            </DataTrigger>
+                            <DataTrigger
+                                Binding="{Binding IsPlaying}"
+                                TargetType="Button"
+                                Value="False">
+                                <Setter Property="Text" Value="{StaticResource PlayIcon}"/>
+                            </DataTrigger>
+                        </Button.Triggers>
+                    </Button>
+
                     <Button Text="{x:Static fontAwesome:FontAwesomeIcons.CaretSquareLeft}"
                             Grid.Column="2"
                             FontFamily="FAR"
@@ -243,8 +266,10 @@
                             FontFamily="FAR"
                             FontSize="30"
                             />
-                    <Label Text="{Binding Length}"
-                           FontSize="Small"/>
+                    <StackLayout Orientation="Vertical">
+                        <Label Text="{Binding Position}"/>
+                        <Label Text="{Binding Length}"/>
+                    </StackLayout>
 
                 </Grid>
             </StackLayout>

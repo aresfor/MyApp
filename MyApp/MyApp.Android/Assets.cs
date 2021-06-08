@@ -18,6 +18,12 @@ using MediaManager;
 using MediaManager.Library;
 using Xamarin.Essentials;
 using Android.Media;
+using Android.Graphics;
+using Xamarin.Forms;
+using SkiaSharp;
+using SkiaSharp.Views.Android;
+using System.Runtime.Serialization;
+using System.Runtime.Serialization.Formatters.Binary;
 
 [assembly:Xamarin.Forms.Dependency(typeof(Assets))]
 namespace MyApp.Droid
@@ -55,6 +61,7 @@ namespace MyApp.Droid
         {
             List<Song> songs = new List<Song>();
             FileInfo f = null;
+            
             string filePath = Android.OS.Environment.GetExternalStoragePublicDirectory(Android.OS.Environment.DirectoryMusic).ToString();
             foreach (string musicFilePath in Directory.EnumerateFiles(filePath, "*", SearchOption.AllDirectories))
             {
@@ -63,14 +70,16 @@ namespace MyApp.Droid
                 MediaMetadataRetriever mmr = new MediaMetadataRetriever();
                 mmr.SetDataSource(musicFilePath);
                 f = new FileInfo(musicFilePath);
+                //string imagePath = System.IO.Path.Combine(FileSystem.CacheDirectory, f.Name + ".png");
                 songs.Add(new Song
                 {
                     Name = f.Name,
                     DisplayName = mmr.ExtractMetadata(MetadataKey.Title),
                     Singer = mmr.ExtractMetadata(MetadataKey.Artist),
                     Length = mmr.ExtractMetadata(MetadataKey.Duration),
-                    Image = mmr.ExtractMetadata(MetadataKey.ImagePrimary)==null?"IA.jpg": mmr.ExtractMetadata(MetadataKey.ImagePrimary)
+                    Image = GetImageSource(f.Name)
                 }); 
+                //Image = mmr.ExtractMetadata(MetadataKey.ImagePrimary) == null ? "IA.jpg" : mmr.ExtractMetadata(MetadataKey.ImagePrimary)
 
             }
             #region ICursor方法
@@ -79,7 +88,7 @@ namespace MyApp.Droid
             //for (int i = 0; i < cursor.Count; i++)
             //{
             //    cursor.MoveToNext();
-                
+
             //    string singerName = cursor.GetString(cursor
             //        .GetColumnIndex(MediaStore.Audio.ArtistColumns.Artist));
             //    string songName = cursor.GetString(cursor
@@ -96,6 +105,59 @@ namespace MyApp.Droid
             //Console.WriteLine("歌曲数目:" + songs.Count);
             #endregion
             return songs;
+        }
+
+        public string GetImageSource(string name)
+        {
+            string imagePath = System.IO.Path.Combine(FileSystem.CacheDirectory, name + ".png");
+            if (Directory.GetFiles(FileSystem.CacheDirectory, name + ".png").Length != 0)
+            {
+                return imagePath;
+            }
+
+            //var bitmap = CrossMediaManager.Current.Queue.Current.Image as Android.Graphics.Bitmap;
+            //MediaMetadataRetriever mmr = new MediaMetadataRetriever();
+            //mmr.SetDataSource();
+            string filePath = Android.OS.Environment.GetExternalStoragePublicDirectory(Android.OS.Environment.DirectoryMusic).ToString();
+            string musicPath = System.IO.Path.Combine(filePath, name);
+
+            TagLib.File file = TagLib.File.Create(musicPath);
+            var bytes = file.Tag.Pictures[0].Data.Data;
+            File.WriteAllBytes(imagePath, bytes);
+            //bitmap直接压缩成图片保存,文件流
+            //var stream = new FileStream(imagePath, FileMode.Create);
+            //bitmap.Compress(Bitmap.CompressFormat.Png, 100, stream);
+            //stream.Close();
+
+
+
+            //字节流方式写入,未检验
+            //var pic = CrossMediaManager.Current.Queue.Current.Image;
+            //using (MemoryStream ms = new MemoryStream())
+            //{
+            //    IFormatter formatter = new BinaryFormatter();
+            //    formatter.Serialize(ms, pic);
+            //    File.WriteAllBytes(FileSystem.CacheDirectory + name + ".png", ms.GetBuffer());
+            //}
+
+            //return path + name + ".png";
+
+
+            //转换为SKBitmap再用文件流存储SkData，其实也是用流
+            //SKBitmap skBitmap = bitmap.ToSKBitmap();
+            //SKImage image = SKImage.FromBitmap(skBitmap);
+            //SKData encodedData = image.Encode(SKEncodedImageFormat.Png, 100);
+            //var bitmapImageStream = File.Open(imagePath,
+            //                              FileMode.Create,
+            //                              FileAccess.Write,
+            //                              FileShare.None);
+            //encodedData.SaveTo(bitmapImageStream);
+            //bitmapImageStream.Flush(true);
+            //bitmapImageStream.Dispose();
+
+            //ImageSource imgSrc;
+            // or imgSrc = imagePath;
+            return imagePath;
         }
     }
 }

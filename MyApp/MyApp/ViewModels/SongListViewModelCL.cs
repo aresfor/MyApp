@@ -11,6 +11,11 @@ using MyApp.Services;
 using System.Threading.Tasks;
 using MediaManager;
 using MyApp.Global;
+using System.Threading;
+using SkiaSharp.Views;
+using SkiaSharp;
+using System.IO;
+using Xamarin.Essentials;
 
 namespace MyApp.ViewModels
 {
@@ -31,6 +36,7 @@ namespace MyApp.ViewModels
 
         public ICommand PlayOrPauseCommand { get; }
         public ICommand CollectionChangeCommand { get; }
+        Timer SyncTimer { get; set; }
 
         string imageURL = "https://www.gematsu.com/wp-content/uploads/2014/01/IA-PSV-Game-Init.jpg";
         //构造方法会调用两次，为什么？
@@ -64,10 +70,22 @@ namespace MyApp.ViewModels
             //-------Command Init---------------
             PlayOrPauseCommand = new MvvmHelpers.Commands.Command(PlayOrPause);
             CollectionChangeCommand = new MvvmHelpers.Commands.Command(CollectionChange);
+
+            SyncTimer = new Timer(CallBack, null, 0, 200);
             //加载页面的时候就刷新一次列表
             InitRefreshCommand.ExecuteAsync();
         }
-
+        bool isPlaying;
+        public bool IsPlaying
+        {
+            get => isPlaying;
+            set => SetProperty(ref isPlaying, value);
+        }
+        void test()
+        {
+            Image i = new Image();
+            i.Source = "sadas";
+        }
         async Task AddCollectionToAccount()
         {
             var res =await AccountService.UpdateAccount(LoginStates.account.AccountId, CollectionSelected.CollectionId, 1);
@@ -77,6 +95,19 @@ namespace MyApp.ViewModels
                 await Application.Current.MainPage.DisplayAlert("失败", "未添加" + $"{CollectionSelected.Name}" + "歌单", "Cancel");
 
         }
+        void CallBack(object state)
+        {
+            if (CrossMediaManager.Current.IsPlaying())
+            {
+                Position = CrossMediaManager.Current.Position.TotalSeconds;
+                IsPlaying = true;
+            }
+            else
+            {
+                IsPlaying = false;
+            }
+        }
+
         async Task AddSongToCollection(int SongId)
         {
             var CollectionName = await Application.Current.MainPage.DisplayPromptAsync("加入歌单", "歌单名字");
@@ -88,6 +119,12 @@ namespace MyApp.ViewModels
             }
             await CollectionService.AddSongToCollection(collection.CollectionId, SongId);
 
+        }
+        ImageSource seekBarIconSource = "IA.jpg";
+        public ImageSource SeekBarIconSource
+        {
+            get => seekBarIconSource;
+            set => SetProperty(ref seekBarIconSource, value);
         }
         public void CollectionChange()
         {
@@ -113,23 +150,34 @@ namespace MyApp.ViewModels
         {
             await PlayerService.SeekTo(Position);
         }
+        double length = 1;
         public double Length
         {
-            get => PlayerService.Length == 0 ? 1 : PlayerService.Length;
-            set => SetProperty(ref PlayerService.Length, value);
+            get => length;
+            set => SetProperty(ref length, value);
         }
         async void PlayOrPause()
         {
             if (PlayerService.isPlaying())
+            {
                 PlayerService.Pause();
+                //Application.Current.Resources["ButtonIcon"] = "\uf144";
+            }
             else
+            {
                 await PlayerService.Play();
+                //Application.Current.Resources["ButtonIcon"] = "\uf28b";
+
+
+            }
         }
         async Task SetSong(string name)
-        {
+        {   
             await PlayerService.SetSong(name);
+            SeekBarIconSource = ImageService.GetImageSource(name); 
+            //Application.Current.Resources["ButtonIcon"] = "\uf28b";
+            Length = CrossMediaManager.Current.Queue.Current.Duration.TotalSeconds;
         }
-        
         
         async Task Selected(object obj)
         {
