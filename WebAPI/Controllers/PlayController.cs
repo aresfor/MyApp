@@ -66,7 +66,7 @@ namespace MyApp.WebAPI.Controllers
                     DisplayName = tagFile.Tag.Title,
                     Singer = tagFile.Tag.FirstPerformer,
                     Length = tagFile.Length.ToString(),
-                    Image = "IA.jpg"
+                    Image = "https://cqupt426.top/Image/"+tagFile.Name+".png"
                 });
             }
             context.Songs.UpdateRange(songs);

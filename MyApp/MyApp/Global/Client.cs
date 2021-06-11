@@ -8,8 +8,8 @@ namespace MyApp.Global
 {
     public static class Client
     {
-        //Android localDebug url:"https://10.0.2.2:5001",WebAPi:"https://cqupt426.top"
-        static string BaseUrl = "https://10.0.2.2:5001";
+        //Android localDebug url:"https://10.0.2.2:5001",WebAPi:"https://cqupt426.top:5001"
+        static string BaseUrl = "https://cqupt426.top:5001";
 
         public static HttpClient client;
        // public class datastore
@@ -27,21 +27,20 @@ namespace MyApp.Global
        // }
         public static void Init()
         {
-            var httpClientHandler = new HttpClientHandler();
-            httpClientHandler.ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => { return true; };
+            //var httpClientHandler = new HttpClientHandler();
+            //httpClientHandler.ServerCertificateCustomValidationCallback = (message, cert, chain, errors) => { return true; };
 
-            client = new HttpClient(httpClientHandler);
-            //本地证书
-            client.BaseAddress = new Uri(BaseUrl);
-
-
+            //client = new HttpClient(httpClientHandler);
+            ////本地证书
+            //client.BaseAddress = new Uri(BaseUrl);
 
 
-            //client = new HttpClient()
-            //{
-            //    BaseAddress = new Uri(BaseUrl)
-            //};
 
+            client = new HttpClient()
+            {
+                BaseAddress = new Uri(BaseUrl)
+            };
+            client.Timeout = TimeSpan.FromMinutes(1);
         }
     }
 }

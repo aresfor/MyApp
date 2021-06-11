@@ -64,7 +64,7 @@ namespace MyApp.ViewModels
             DragCompletedCommand = new AsyncCommand(DragCompleted);
             SetSongCommand = new AsyncCommand<string>(SetSong);
             InitRefreshCommand = new AsyncCommand(InitRefresh);
-            AddSongToCollectionCommand = new AsyncCommand<int>(AddSongToCollection);
+            //AddSongToCollectionCommand = new AsyncCommand<int>(AddSongToCollection);
             AddCollectionToAccountCommand = new AsyncCommand(AddCollectionToAccount);
             RefreshCommand = new AsyncCommand(Refresh);
             //-------Command Init---------------
@@ -75,6 +75,8 @@ namespace MyApp.ViewModels
             //加载页面的时候就刷新一次列表
             InitRefreshCommand.ExecuteAsync();
         }
+        
+
         bool isPlaying;
         public bool IsPlaying
         {
@@ -108,18 +110,18 @@ namespace MyApp.ViewModels
             }
         }
 
-        async Task AddSongToCollection(int SongId)
-        {
-            var CollectionName = await Application.Current.MainPage.DisplayPromptAsync("加入歌单", "歌单名字");
-            var collection = LoginStates.account.Collecitons.Find(c => c.Name == CollectionName);
-            if (collection == null)
-            {
-                await Application.Current.MainPage.DisplayAlert("失败", "没有这个歌单", "OK");
-                return;
-            }
-            await CollectionService.AddSongToCollection(collection.CollectionId, SongId);
+        //async Task AddSongToCollection(int SongId,int isAdd)
+        //{
+        //    var CollectionName = await Application.Current.MainPage.DisplayPromptAsync("加入歌单", "歌单名字");
+        //    var collection = LoginStates.account.Collecitons.Find(c => c.Name == CollectionName);
+        //    if (collection == null)
+        //    {
+        //        await Application.Current.MainPage.DisplayAlert("失败", "没有这个歌单", "OK");
+        //        return;
+        //    }
+        //    await CollectionService.UpdateSongToCollection(collection.CollectionId, SongId, isAdd);
 
-        }
+        //}
         ImageSource seekBarIconSource = "IA.jpg";
         public ImageSource SeekBarIconSource
         {

@@ -11,26 +11,25 @@ using MyApp.Services;
 using System.Threading.Tasks;
 using MediaManager;
 using MyApp.Global;
+using MyApp.Views;
 
 namespace MyApp.ViewModels
 {
     class CollectionViewModel : BaseViewModel
     {
-        public ObservableRangeCollection<Song> song { get; set; }
-        public ObservableRangeCollection<Grouping<string, Song>> songGroups { get; }
+        public ObservableRangeCollection<Collection> collection { set; get; }
         public AsyncCommand<object> SelectedCommand { get; }
-        public AsyncCommand<int> AddSongToCollectionCommand { get; }
-        public AsyncCommand<Song> DeleteCommand { get; }
         public AsyncCommand RefreshCommand { get; }
-        public AsyncCommand<Song> FavouriteCommand { get; }
-        public AsyncCommand AddCommand { get; }
+        public AsyncCommand<int> AddCollectionToAccountCommand { get; }
+        public ICommand ChangeToMyCollectionsCommand { get; }
+        public ICommand ChangeToAllCollectionsCommand { get; }
+
         string imageURL = "https://www.gematsu.com/wp-content/uploads/2014/01/IA-PSV-Game-Init.jpg";
         //构造方法会调用两次，为什么,因为xaml绑定了context就不用再具体代码中再调用一次
         public CollectionViewModel()
         {
-            Title = "Song List";
-            song = new ObservableRangeCollection<Song>();
-            songGroups = new ObservableRangeCollection<Grouping<string, Song>>();
+            Title = "Collection List";
+            collection = new ObservableRangeCollection<Collection>();
             //IncreaseCount = new Command(OnIncrease);
 
             //List<Song> list = new List<Song> { new Song("All Along with you", "EGOIST", "3:44",imageURL),
@@ -44,84 +43,89 @@ namespace MyApp.ViewModels
 
             //----AsyncCommand Init-----------
             SelectedCommand = new AsyncCommand<object>(Selected);
-            AddSongToCollectionCommand = new AsyncCommand<int>(AddSongToCollection);
             RefreshCommand = new AsyncCommand(Refresh);
-            DeleteCommand = new AsyncCommand<Song>(DeleteSong);
-            FavouriteCommand = new AsyncCommand<Song>(Favourite);
-            AddCommand = new AsyncCommand(AddSong);
-
+            ChangeToMyCollectionsCommand = new MvvmHelpers.Commands.Command(ChangeToMyCollections);
+            ChangeToAllCollectionsCommand = new MvvmHelpers.Commands.Command(ChangeToAllCollections);
+            AddCollectionToAccountCommand = new AsyncCommand<int>(CollectionToAccount);
             //-------Command Init---------------
             //加载页面的时候就刷新一次列表
             //RefreshCommand.ExecuteAsync();
         }
-        async Task AddSong()
+        public enum CollectionType
         {
-            var name = await Application.Current.MainPage.DisplayPromptAsync("Name", "NameMessage");
-            var singer = await Application.Current.MainPage.DisplayPromptAsync("Singer", "SingerMessage");
-            var length = await Application.Current.MainPage.DisplayPromptAsync("Length", "length");
+            MyCollections = 0,
+            AllCollections = 1
+        }
+        CollectionType type = CollectionType.AllCollections;
+        void  ChangeToAllCollections()
+        {
+            type = CollectionType.AllCollections;
+            
 
-            await InternetSongService.AddSong(name, singer, length);
-            await Refresh();
         }
-        async Task Favourite(Song song)
+        void ChangeToMyCollections()
         {
-            await Application.Current.MainPage.DisplayAlert("Favourate", song.Name, "OK");
+            type = CollectionType.MyCollections;
+
         }
-        async Task DeleteSong(Song song)
+        async Task CollectionToAccount(int CollectionId)
         {
-            await InternetSongService.DeleteSong(song.SongId);
-            await Refresh();
-        }
-        async Task AddSongToCollection(int SongId)
-        {
-            var CollectionName = await Application.Current.MainPage.DisplayPromptAsync("加入歌单", "歌单名字");
-            var collections = await CollectionService.GetCollectionByAccountId(LoginStates.account.AccountId);
-            Collection collection = null;
-            foreach (var c in collections)
+            int add = 1;
+            var array = await CollectionService.GetCollectionByAccountId(LoginStates.account.AccountId);
+            foreach(var a in array)
             {
-                if (c.Name == CollectionName)
+                if(a.CollectionId == CollectionId)
                 {
-                    collection = c;
+                    add = 0;
                     break;
-                }
+                }    
             }
-            if (collection == null)
+           var res =  await AccountService.UpdateAccount(LoginStates.account.AccountId, CollectionId,add);
+            if(res)
             {
-                await Application.Current.MainPage.DisplayAlert("失败", "没有这个歌单", "OK");
-                return;
+                if(add == 1)
+                    await Application.Current.MainPage.DisplayAlert("成功", "添加歌单成功","OK");
+                else
+                    await Application.Current.MainPage.DisplayAlert("成功", "删除歌单成功", "OK");
             }
             else
             {
-                await CollectionService.AddSongToCollection(collection.CollectionId, SongId);
-                await Application.Current.MainPage.DisplayAlert("成功 ", "已添加到歌单", "OK");
+                await Application.Current.MainPage.DisplayAlert("失败", "绝对不是服务器君的错!","Cancel");
 
             }
-
         }
-
+     
+       
+       
         async Task Selected(object obj)
         {
-            var song = obj as Song;
-            if (song == null)
+            var c = obj as Collection;
+            if (c == null)
                 return;
+            var collectionId = SelectedItem.CollectionId;
             SelectedItem = null;
-            await Application.Current.MainPage.DisplayAlert("SelectedItem", song.Name, "OK");
+            await Shell.Current.GoToAsync($"/{nameof(SongListPage)}?collectionId={collectionId}");
+            //await Application.Current.MainPage.DisplayAlert("SelectedItem", c.Name, "OK");
         }
         async Task Refresh()
         {
             //Mode设置为twoWay会自动设置IsBusy=True
             IsBusy = true;
             //await Task.Delay(500);
-            song.Clear();
+            collection.Clear();
             //var songs = await SongService.GetSong();
-            var songs = await InternetSongService.GetSong();
-            song.AddRange(songs);
+            IEnumerable<Collection> collections = null;
+            if (type == CollectionType.AllCollections)
+                collections = await CollectionService.GetCollection();
+            else if(type == CollectionType.MyCollections)
+                collections = await CollectionService.GetCollectionByAccountId(LoginStates.account.AccountId);
+            collection.AddRange(collections);
             IsBusy = false;
         }
 
-        Song selectedItem;
+        Collection selectedItem;
         //Song previousSelectedItem;
-        public Song SelectedItem
+        public Collection SelectedItem
         {
             get => selectedItem;
             set => SetProperty(ref selectedItem, value);

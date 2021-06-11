@@ -27,6 +27,20 @@ namespace MyApp.WebAPI.Controllers
             var res = await context.Collections.ToListAsync();
             return res;
         }
+        [HttpGet("{dif}/{CollectionId}")]
+        public async Task<ActionResult<IEnumerable<Song>>> GetSongFromColletions([FromRoute] int dif,[FromRoute] int CollectionId)
+        {
+            var query = from a in context.Collections
+                       where a.CollectionId == CollectionId
+                       select (
+                           from c in a.songs
+                           select c
+                       );
+
+
+            var res = await query.FirstOrDefaultAsync();
+            return res.ToList();
+        }
         [HttpGet("{AccountId}")]
         public async Task<ActionResult<IEnumerable<Collection>>> GetAccountCollections([FromRoute] int AccountId)
         {
@@ -68,23 +82,33 @@ namespace MyApp.WebAPI.Controllers
             return CreatedAtAction("AddCollection", "api/Collection", collection);
 
         }
-        [HttpPut("{CollectionId}/{SongId}")]
-        public async Task<ActionResult<int>> UpdateCollection([FromRoute]int CollectionId,[FromRoute]int SongId)
+        [HttpPut("{CollectionId}/{SongId}/{isAdd}")]
+        public async Task<ActionResult<int>> UpdateCollection([FromRoute]int CollectionId,[FromRoute]int SongId,[FromRoute] int isAdd = 1)
         {
-            var collection = await context.Collections.FindAsync(CollectionId);
-            var song = await context.Songs.FindAsync(SongId);
-            if(collection == null|| song == null)
+            var collection = await context.Collections
+                .Where(s => s.CollectionId == CollectionId)
+                .Include(t => t.accounts).FirstOrDefaultAsync();
+            var song = await context.Songs
+                .Where(s => s.SongId == SongId)
+                .Include(t => t.collections).FirstOrDefaultAsync();
+            if (collection == null|| song == null)
             {
                 return NotFound();
             }
-            if (collection.songs == null)
-                collection.songs = new List<Song>();
-            if (song.collections == null)
-                song.collections = new List<Collection>();
-            collection.songs.Add(song);
-            song.collections.Add(collection);
+            if(isAdd == 1)
+            {
+                collection.songs.Add(song);
+                song.collections.Add(collection);
+            }else
+            {
+                if (!collection.songs.Remove(song) || !song.collections.Remove(collection))
+                    return NotFound();
+            }
+            
+
             var res = context.Collections.Update(collection);
             var res2 = context.Songs.Update(song);
+
             if (res.State == EntityState.Modified || res2.State == EntityState.Modified)
                 return await context.SaveChangesAsync();
             else if (res.State == EntityState.Unchanged || res2.State == EntityState.Unchanged)

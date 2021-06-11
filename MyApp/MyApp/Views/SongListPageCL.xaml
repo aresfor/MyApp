@@ -11,7 +11,8 @@
              xmlns:android="http://schemas.android.com/apk/res/android" 
              xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
              xmlns:skia="clr-namespace:SkiaSharp;assembly=SkiaSharp" 
-             xmlns:widget="clr-namespace:Android.Widget;assembly=Mono.Android">
+             xmlns:widget="clr-namespace:Android.Widget;assembly=Mono.Android"
+             xmlns:yummy="clr-namespace:Xamarin.Forms.PancakeView;assembly=Xamarin.Forms.PancakeView" xmlns:sho="http://sharpnado.com" xmlns:converters="clr-namespace:MyApp.Converters">
 
     <ContentPage.BindingContext>
         <viewmodels:SongListViewModelCL/>
@@ -50,7 +51,7 @@
                                         HorizontalOptions="Center"
                                VerticalOptions="Center"/>
                         <Label Text="Favourite"/>
-                        
+                    
                     </StackLayout>
                 </Frame>
             </StackLayout>
@@ -96,7 +97,21 @@
                                 <Label Text="{Binding Singer}"
                                         HorizontalOptions="Center"
                                VerticalOptions="Center"/>
-                            </StackLayout>
+                            <yummy:PancakeView BackgroundColor="#bc91d7" 
+                                               HorizontalOptions="FillAndExpand" 
+                                               HeightRequest="10"
+                                               BackgroundGradientStartPoint="0,0" 
+                                               BackgroundGradientEndPoint="1,0">
+                                <yummy:PancakeView.BackgroundGradientStops>
+                                    <yummy:GradientStopCollection>
+                                        <yummy:GradientStop Color="#FF0000" Offset="0" />
+                                        <yummy:GradientStop Color="#00FF00" Offset="0.5" />
+                                        <yummy:GradientStop Color="#0000FF" Offset="1" />
+                                    </yummy:GradientStopCollection>
+                                </yummy:PancakeView.BackgroundGradientStops>
+                                <Label Text="111111"/>
+                            </yummy:PancakeView>
+                        </StackLayout>
                         </Frame>
                     </SwipeView>
                 </StackLayout>
@@ -233,7 +248,7 @@
                                  Source="{Binding SeekBarIconSource}"
                                  CornerRadius="10"/>
                     <!--{x:Static fontAwesome:FontAwesomeIcons.PlayCircle}-->
-                    <Button Text="{x:Static fontAwesome: FontAwesomeIcons.PlayCircle}"
+                    <Button Text="{x:Static fontAwesome:FontAwesomeIcons.PlayCircle}"
                             Grid.Column="3"
                             FontFamily="FAR"
                             FontSize="40"
@@ -272,6 +287,7 @@
                     </StackLayout>
 
                 </Grid>
+                
             </StackLayout>
         </StackLayout>
     </ContentPage.Content>

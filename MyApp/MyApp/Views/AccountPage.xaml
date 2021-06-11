@@ -24,6 +24,7 @@
             
             <Button Text="高级" Command="{Binding AdvancedCommand}"/>
             <Button Text="退出登录" Command="{Binding LogOutCommand}"/>
+            <Button Text="加载服务器所有歌曲并生成图片" Command="{Binding LoadServerLocalSongCommand}"/>
         </StackLayout>
     </ContentPage.Content>
 </ContentPage>

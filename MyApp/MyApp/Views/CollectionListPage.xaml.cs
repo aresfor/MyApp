@@ -10,11 +10,12 @@ using Xamarin.Forms.Xaml;
 namespace MyApp.Views
 {
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class CollectionPage : ContentPage
+    public partial class CollectionListPage : ContentPage
     {
-        public CollectionPage()
+        public CollectionListPage()
         {
             InitializeComponent();
         }
+
     }
 }

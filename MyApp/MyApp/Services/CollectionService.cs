@@ -15,7 +15,12 @@ namespace MyApp.Services
         {
 
         }
-
+        public static async Task<IEnumerable<Song>> GetSongFromColletion(int CollectionId)
+        {
+            var json = await Client.client.GetStringAsync("api/Collection/"+ "1/" + CollectionId.ToString());
+            var songs = JsonConvert.DeserializeObject<IEnumerable<Song>>(json);
+            return songs;
+        }
         public static async Task<IEnumerable<Collection>> GetCollection()
         {
            var json =  await Client.client.GetStringAsync("api/Collection");
@@ -40,11 +45,12 @@ namespace MyApp.Services
             //var content = new StringContent(json, Encoding.UTF8, "application/json");
             var res = await Client.client.PostAsync("api/Collection" + AccountName+"/"+CollectionName, null);
         }
-        public static async Task AddSongToCollection(int CollectionId,int SongId)
+        public static async Task UpdateSongToCollection(int CollectionId,int SongId,int isAdd = 1)
         {
             //var json = JsonConvert.SerializeObject(new List<int> { CollectionId, SongId });
             //var content = new StringContent(json, Encoding.UTF8, "application/json");
-            var res = await Client.client.PutAsync("api/Collection/"+CollectionId.ToString()+"/"+SongId.ToString(),null);
+            var res = await Client.client.PutAsync("api/Collection/"+CollectionId.ToString()+"/"+SongId.ToString()+"/" + 
+               isAdd.ToString() ,null);
         }
         public static async Task DeleteCollection(int CollectionId)
         {

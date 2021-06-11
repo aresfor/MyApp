@@ -3,7 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" 
              xmlns:viewmodels="clr-namespace:MyApp.ViewModels" 
              xmlns:model="clr-namespace:MyApp.Shared.Models" 
-             xmlns:xct="http://xamarin.com/schemas/2020/toolkit"
+             xmlns:xct="http://xamarin.com/schemas/2020/toolkit" 
+             xmlns:converters="clr-namespace:MyApp.Converters"
+             xmlns:controls="clr-namespace:MyApp.Views"
              x:Class="MyApp.Views.SongListPage"
              x:DataType="viewmodels:SongListViewModel"
              >
@@ -20,8 +22,59 @@
         <ToolbarItem Text="Add"
                      Command="{Binding AddCommand}"/>
     </ContentPage.ToolbarItems>
-    
-    <ListView BackgroundColor="Transparent"
+    <ContentPage.Content>
+        <!--<StackLayout>
+            <sho:Shadows Shades="{StaticResource DarkBottomShadow}">
+            <StackLayout
+                    BackgroundColor="{StaticResource DarkSurface}"
+                    Orientation="Vertical"
+                    Spacing="0">
+                <StackLayout.Padding>
+                    <OnPlatform x:TypeArguments="Thickness">
+                        <On Platform="iOS">20, 60, 20, 20</On>
+                        <On Platform="Android">20</On>
+                    </OnPlatform>
+                </StackLayout.Padding>
+                <sho:TabHostView
+                        x:Name="TabHost"
+                        WidthRequest="280"
+                        HeightRequest="50"
+                        Margin="0,35,0,10"
+                        HorizontalOptions="Center"
+                        VerticalOptions="EndAndExpand"
+                        BackgroundColor="{StaticResource DarkSurface}"
+                        CornerRadius="25"
+                        IsSegmented="True"
+                        SelectedIndex="{Binding Mode, Converter={converters:ContentTypeToInt}, Mode=TwoWay}"
+                        Shades="{StaticResource DarkNeumorphism}"
+                        TabType="Fixed">
+                    <sho:TabHostView.Tabs>
+                        <sho:UnderlinedTabItem Style="{StaticResource SegmentedTabStyle}" Label="所有歌曲" />
+                        <sho:UnderlinedTabItem Style="{StaticResource SegmentedTabStyle}" Label="所有歌单" />
+                        <sho:UnderlinedTabItem Style="{StaticResource SegmentedTabStyle}" Label="我的歌单" />
+                    </sho:TabHostView.Tabs>
+                </sho:TabHostView>
+            </StackLayout>
+        </sho:Shadows>-->
+            <!--<Picker HeightRequest="50"
+                    SelectedItem="{Binding ContentItem,
+                Converter={converters:ContentTypeToInt},
+                Mode=TwoWay}"
+                    >
+                -->
+        <!--<Picker.Behaviors>
+                    <xct:EventToCommandBehavior
+                EventName="ItemSelected"
+                Command="{Binding RefreshCommand}"
+                EventArgsConverter="{StaticResource ItemSelectedEventArgsConverter}"/>
+                </Picker.Behaviors>--><!--
+                <Picker.Items>
+                    <x:String>AllCollections</x:String>
+                    <x:String>MyCollections</x:String>
+                </Picker.Items>
+            </Picker>-->
+
+        <ListView BackgroundColor="Transparent"
               ItemsSource="{Binding song}"
               HasUnevenRows="True"
               
@@ -36,88 +89,89 @@
               x:Name="SongPage"
               >
 
-        <ListView.Behaviors>
-            <xct:EventToCommandBehavior
+            <ListView.Behaviors>
+                <xct:EventToCommandBehavior
                 EventName="ItemSelected"
                 Command="{Binding SelectedCommand}"
                 EventArgsConverter="{StaticResource ItemSelectedEventArgsConverter}"/>
-        </ListView.Behaviors>
-        
-        <ListView.ItemTemplate>
-            <DataTemplate x:DataType="model:Song">
-                <ViewCell>
-                    <ViewCell.ContextActions>
-                        <MenuItem Text="Delete"
+            </ListView.Behaviors>
+
+            <ListView.ItemTemplate>
+                <DataTemplate x:DataType="model:Song">
+                    <ViewCell>
+                        <ViewCell.ContextActions>
+                            <MenuItem Text="Delete"
                                   Command="{Binding Source={x:Reference SongPage},
                             Path=BindingContext.DeleteCommand}"
                                   CommandParameter="{Binding .}"
                                   IsDestructive="True"/>
-                        <MenuItem Text="AddToCollection"
+                            <MenuItem Text="AddToCollection"
                                   Command="{Binding Source={x:Reference SongPage},
                             Path=BindingContext.AddSongToCollectionCommand}"
                                   CommandParameter="{Binding SongId}"
                                   />
-                    </ViewCell.ContextActions>
-                    <Grid Padding="10">
-                        <Frame CornerRadius="20"
+                        </ViewCell.ContextActions>
+                        <Grid Padding="10">
+                            <Frame CornerRadius="20"
                                HasShadow="True"
                                HeightRequest="120">
-                            <StackLayout Orientation="Horizontal">
-                                <Image Source="{Binding Image}"
+                                <StackLayout Orientation="Horizontal">
+                                    <Image Source="{Binding Image}"
                                        WidthRequest="100"
                                        HeightRequest="100"
                                        VerticalOptions="Center"
                                        Aspect="Fill"
                                        BackgroundColor="Blue"/>
-                                <StackLayout VerticalOptions="Center">
-                                    <Label VerticalOptions="Center"
+                                    <StackLayout VerticalOptions="Center">
+                                        <Label VerticalOptions="Center"
                                            FontSize="Large"
                                            Text="{Binding DisplayName}">
-                                    </Label>
-                                    <Label VerticalOptions="Center"
+                                        </Label>
+                                        <Label VerticalOptions="Center"
                                            FontSize="Medium"
                                            Text="{Binding Singer}">
-                                    </Label>
-                                    <Label VerticalOptions="Center"
+                                        </Label>
+                                        <Label VerticalOptions="Center"
                                            FontSize="Small"
                                            Text="{Binding Length}">
-                                    </Label>
-                                    <Label VerticalOptions="Center"
+                                        </Label>
+                                        <Label VerticalOptions="Center"
                                            FontSize="Small"
                                            Text="{Binding SongId}">
-                                    </Label>
-                                </StackLayout>
+                                        </Label>
+                                    </StackLayout>
 
-                                <Button Text="细节"
+                                    <Button Text="细节"
                                         Command="{Binding Source={RelativeSource
                                     AncestorType={x:Type viewmodels:SongListViewModel}},
                                     Path=FavouriteCommand}"
                                         CommandParameter="{Binding .}"/>
-                            </StackLayout>
-                        </Frame>
-                    </Grid>
-                </ViewCell>
-            </DataTemplate>
-        </ListView.ItemTemplate>
-        <ListView.GroupHeaderTemplate>
-            <DataTemplate>
-                <ViewCell>
-                    <StackLayout Orientation="Vertical">
-                        
-                        <Label Text="Hi"/>
-                    </StackLayout>
-                </ViewCell>
-            </DataTemplate>
-        </ListView.GroupHeaderTemplate>
-        <ListView.Header>
-            <Label Text="Header">
-                
-            </Label>
-        </ListView.Header>
-        <ListView.Footer>
-            <Label Text="Footer">
-                
-            </Label>
-        </ListView.Footer>
-    </ListView>
+                                </StackLayout>
+                            </Frame>
+                        </Grid>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+            <ListView.GroupHeaderTemplate>
+                <DataTemplate>
+                    <ViewCell>
+                        <StackLayout Orientation="Vertical">
+
+                            <Label Text="Hi"/>
+                        </StackLayout>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.GroupHeaderTemplate>
+            <ListView.Header>
+                <Label Text="Header">
+
+                </Label>
+            </ListView.Header>
+            <ListView.Footer>
+                <Label Text="Footer">
+
+                </Label>
+            </ListView.Footer>
+        </ListView>
+    </ContentPage.Content>
 </ContentPage>

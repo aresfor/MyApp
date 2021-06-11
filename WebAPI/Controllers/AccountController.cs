@@ -79,24 +79,32 @@ namespace MyApp.WebAPI.Controllers
         [HttpPut("{AccountId}/{CollectionId}/{isAdd}")]
         public async Task<ActionResult<int>> UpdateAccount([FromRoute]int AccountId,[FromRoute] int CollectionId,[FromRoute] int isAdd)
         {
-            var account = await context.Accounts.FindAsync(AccountId);
-            var collection = await context.Collections.FindAsync(CollectionId);
+               var account = await context.Accounts
+                .Where(s => s.AccountId == AccountId)
+                .Include(t => t.Collecitons).FirstOrDefaultAsync();
+            var collection = await context.Collections
+                .Where(s => s.CollectionId == CollectionId)
+                .Include(t => t.accounts).FirstOrDefaultAsync();
+                
+                               
+            //var collection = await context.Collections.FindAsync(CollectionId);
             if (account == null || collection == null)
                 return NotFound();
 
-            if (account.Collecitons == null)
-                account.Collecitons = new List<Collection>();
-            if (collection.accounts == null)
-                collection.accounts = new List<Account>();
+            //if (account.Collecitons == null)
+            //    account.Collecitons = new List<Collection>();
+            //if (collection.accounts == null)
+            //    collection.accounts = new List<Account>();
             if (isAdd == 1)
             {
                 account.Collecitons.Add(collection);
                 collection.accounts.Add(account);
             }
-            else if(isAdd==0)
+            else if(isAdd == 0)
             {
-                if(account.Collecitons.Remove(collection) || collection.accounts.Remove(account) )
+                if (!account.Collecitons.Remove(collection) || !collection.accounts.Remove(account) )
                     return NotFound();
+                
             }
                 
 

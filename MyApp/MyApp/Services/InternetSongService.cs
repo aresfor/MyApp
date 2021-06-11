@@ -105,7 +105,15 @@ namespace MyApp.Services
 
             }
         }
+        static public async Task LoadServerLocalSong()
+        {
+            var response = await Client.client.PutAsync("api/Play", null);
+            if (!response.IsSuccessStatusCode)
+            {
+                //执行无法提交之后的代码
 
+            }
+        }
         //static public async Task<Song> GetSongById(int id)
         //{
         //    //var song = await db.FindAsync<Song>(id);

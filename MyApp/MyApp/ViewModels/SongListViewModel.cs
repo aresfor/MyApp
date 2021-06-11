@@ -11,26 +11,50 @@ using MyApp.Services;
 using System.Threading.Tasks;
 using MediaManager;
 using MyApp.Global;
+using System.Web;
+using MyApp.Views;
 
 namespace MyApp.ViewModels
 {
-    class SongListViewModel:BaseViewModel
+    //[QueryProperty(nameof(EnableRefresh),nameof(EnableRefresh))]
+    
+    class SongListViewModel:BaseViewModel, IQueryAttributable
     {
+        
         public ObservableRangeCollection<Song> song { get; set; }
-        public ObservableRangeCollection<Grouping<string, Song>> songGroups { get; }
+        public ObservableRangeCollection<Collection> collection { get; set; }
         public AsyncCommand<object> SelectedCommand { get; }
         public AsyncCommand<int> AddSongToCollectionCommand { get; }
         public AsyncCommand<Song> DeleteCommand { get; }
         public AsyncCommand RefreshCommand { get; }
         public AsyncCommand<Song> FavouriteCommand { get; }
         public AsyncCommand AddCommand { get; }
+        int collectionId;
+        //public bool EnableRefresh { get; set; }
         string imageURL = "https://www.gematsu.com/wp-content/uploads/2014/01/IA-PSV-Game-Init.jpg";
         //构造方法会调用两次，为什么,因为xaml绑定了context就不用再具体代码中再调用一次
+        public void ApplyQueryAttributes(IDictionary<string, string> query)
+        {
+            // The query parameter requires URL decoding.
+            if (!query.ContainsKey("collectionId"))
+                return;
+            string name = HttpUtility.UrlDecode(query["collectionId"]);
+            if (name != null || name != string.Empty)
+            {
+                int.TryParse(name, out collectionId);
+            }
+            if(collectionId!=0)
+            {
+                ContentItem = ContentType.CollectionSongs;
+            }
+        }
         public SongListViewModel()
         {
+            
             Title = "Song List";
             song = new ObservableRangeCollection<Song>();
-            songGroups = new ObservableRangeCollection<Grouping<string, Song>>();
+            collection = new ObservableRangeCollection<Collection>();
+            
             //IncreaseCount = new Command(OnIncrease);
 
             //List<Song> list = new List<Song> { new Song("All Along with you", "EGOIST", "3:44",imageURL),
@@ -54,6 +78,18 @@ namespace MyApp.ViewModels
             //加载页面的时候就刷新一次列表
             //RefreshCommand.ExecuteAsync();
         }
+        ContentType contentItem = ContentType.InternetSongs;
+        public ContentType ContentItem
+        {
+            get => contentItem;
+            set => SetProperty(ref contentItem, value);
+        }
+        public enum ContentType
+        {
+            //所有歌曲 = 0,
+            InternetSongs = 1,
+            CollectionSongs = 2,
+        }
         async Task AddSong()
         {
             var name = await Application.Current.MainPage.DisplayPromptAsync("Name", "NameMessage");
@@ -74,27 +110,19 @@ namespace MyApp.ViewModels
         }
         async Task AddSongToCollection(int SongId)
         {
-            var CollectionName = await Application.Current.MainPage.DisplayPromptAsync("加入歌单", "歌单名字");
-            var collections =await CollectionService.GetCollectionByAccountId(LoginStates.account.AccountId);
-            Collection collection = null;
-            foreach(var c in collections)
-            {
-                if(c.Name == CollectionName)
-                {
-                    collection = c;
-                    break;
-                }
-            }
-            if (collection == null)
-            {
-                await Application.Current.MainPage.DisplayAlert("失败", "没有这个歌单", "OK");
-                return;
-            }else
-            {
-                await CollectionService.AddSongToCollection(collection.CollectionId, SongId);
-                await Application.Current.MainPage.DisplayAlert("成功 ","已添加到歌单", "OK");
-
-            }
+            //var CollectionName = await Application.Current.MainPage.DisplayPromptAsync("加入歌单", "歌单名字");
+            //var collections =await CollectionService.GetCollectionByAccountId(LoginStates.account.AccountId);
+            //Collection collection = null;
+            //foreach(var c in collections)
+            //{
+            //    if(c.Name == CollectionName)
+            //    {
+            //        collection = c;
+            //        break;
+            //    }
+            //}
+            await Route.GoToPage($"/{nameof(SelectCollectionPage)}?SongId={SongId}");
+            
 
         }
       
@@ -112,9 +140,24 @@ namespace MyApp.ViewModels
             IsBusy = true;
             //await Task.Delay(500);
             song.Clear();
+            
+            switch(ContentItem)
+            {
+                case ContentType.InternetSongs:
+                    {
+                        var s = await InternetSongService.GetSong();
+                        song.AddRange(s);
+                        break;
+                    }
+                case ContentType.CollectionSongs:
+                        {
+                        var s = await InternetSongService.GetSongByCollectionId(collectionId);
+                        song.AddRange(s);
+                        break;
+                    }
+            }
             //var songs = await SongService.GetSong();
-            var songs = await InternetSongService.GetSong();
-            song.AddRange(songs);
+            
             IsBusy = false;
         }
 

@@ -91,6 +91,9 @@
     <FlyoutItem Title="LocalSongListPage" Icon="icon_about.png">
         <ShellContent Route="LocalSongListPage" ContentTemplate="{DataTemplate local:LocalSongListPage}" />
     </FlyoutItem>
+    <FlyoutItem Title="CollectionListPage" Icon="icon_about.png">
+        <ShellContent Route="CollectionListPage" ContentTemplate="{DataTemplate local:CollectionListPage}" />
+    </FlyoutItem>
     <FlyoutItem Title="AccountPage" Icon="icon_about.png">
         <ShellContent Route="AccountPage" ContentTemplate="{DataTemplate local:AccountPage}" />
     </FlyoutItem>

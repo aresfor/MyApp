@@ -1,0 +1,98 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://xamarin.com/schemas/2014/forms"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml" xmlns:viewmodels="clr-namespace:MyApp.ViewModels" xmlns:xct="http://xamarin.com/schemas/2020/toolkit" xmlns:model="clr-namespace:MyApp.Shared.Models"
+             x:Class="MyApp.Views.CollectionListPage">
+    <ContentPage.BindingContext>
+        <viewmodels:CollectionViewModel />
+    </ContentPage.BindingContext>
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <xct:ItemSelectedEventArgsConverter x:Key="ItemSelectedEventArgsConverter"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="我的歌单"
+                     x:Name="MyCollections"
+                     Command="{Binding ChangeToMyCollectionsCommand}"
+                 Order="Primary"
+                 Priority="0" />
+        <ToolbarItem Text="所有歌单"
+                     x:Name="AllCollections"
+                     Command="{Binding ChangeToAllCollectionsCommand}"
+                     Priority="1"/>
+    </ContentPage.ToolbarItems>
+
+    <ContentPage.Content>
+        <ListView BackgroundColor="Transparent"
+              ItemsSource="{Binding collection}"
+              HasUnevenRows="True"
+              
+              SeparatorColor="Blue"
+              SeparatorVisibility="None"
+              SelectedItem="{Binding SelectedItem, Mode=TwoWay}"
+              IsPullToRefreshEnabled="True"
+              IsRefreshing="{Binding IsBusy,Mode=OneWay}"
+              RefreshCommand="{Binding RefreshCommand}"
+              RefreshControlColor="Orange"
+              CachingStrategy="RecycleElement"
+              x:Name="CollectionPage"
+              >
+
+            <ListView.Behaviors>
+                <xct:EventToCommandBehavior
+                EventName="ItemSelected"
+                Command="{Binding SelectedCommand}"
+                EventArgsConverter="{StaticResource ItemSelectedEventArgsConverter}"/>
+            </ListView.Behaviors>
+
+            <ListView.ItemTemplate>
+                <DataTemplate x:DataType="model:Collection">
+                    <ViewCell>
+                        <Grid Padding="10">
+                            <Frame CornerRadius="20"
+                               HasShadow="True"
+                               HeightRequest="120">
+                                <StackLayout Orientation="Horizontal">
+                                    <StackLayout VerticalOptions="Center">
+                                        <Label VerticalOptions="Center"
+                                           FontSize="Large"
+                                           Text="{Binding Name}">
+                                        </Label>
+                                        <Label VerticalOptions="Center"
+                                           FontSize="Small"
+                                           Text="{Binding CollectionId}">
+                                        </Label>
+  
+                                    </StackLayout>
+
+                                    <Button Text="添加歌单"
+                                            FontFamily="FAR"
+                                            FontSize="Medium"
+                                         Command="{Binding Source={x:Reference CollectionPage},
+                            Path=BindingContext.AddCollectionToAccountCommand}"
+                                  CommandParameter="{Binding CollectionId}"/>
+                                </StackLayout>
+                            </Frame>
+                        </Grid>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+           
+            <ListView.Header>
+                <Label Text="歌单列表"
+                       FontFamily="FAR"
+                       HorizontalOptions="CenterAndExpand">
+
+                </Label>
+            </ListView.Header>
+            <ListView.Footer>
+                <Label Text="到底了"
+                       HorizontalOptions="CenterAndExpand"
+                       FontFamily="FAR">
+
+                </Label>
+            </ListView.Footer>
+        </ListView>
+    </ContentPage.Content>
+</ContentPage>

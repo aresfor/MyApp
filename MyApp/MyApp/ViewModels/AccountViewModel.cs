@@ -1,11 +1,13 @@
 ﻿using MvvmHelpers;
 using MvvmHelpers.Commands;
 using MyApp.Global;
+using MyApp.Services;
 using MyApp.Views;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Input;
 using Xamarin.Forms;
 
 namespace MyApp.ViewModels
@@ -16,13 +18,19 @@ namespace MyApp.ViewModels
     {
         public AsyncCommand LogOutCommand { get; }
         public AsyncCommand AdvancedCommand { get; }
+        public AsyncCommand LoadServerLocalSongCommand { get; }
 
         public AccountViewModel()
         {
             LogOutCommand = new AsyncCommand(Logout);
             AdvancedCommand = new AsyncCommand(Advanced);
+            LoadServerLocalSongCommand = new AsyncCommand(LoadServerLocalSong);
             //AccountName = LoginStates.LoginAccountName;
             //AccountAvatar = LoginStates.LoginAvatar;
+        }
+        public async Task LoadServerLocalSong()
+        {
+            await InternetSongService.LoadServerLocalSong();
         }
         public async Task Logout()
         {

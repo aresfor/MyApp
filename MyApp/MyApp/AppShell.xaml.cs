@@ -10,9 +10,11 @@ namespace MyApp
         {
             InitializeComponent();
             //Routing.
-            //Routing.RegisterRoute(nameof(LoginPage), typeof(LoginPage));
-            //Routing.RegisterRoute(nameof(AdvancedPage), typeof(AdvancedPage));
+            Routing.RegisterRoute(nameof(LoginPage), typeof(LoginPage));
+            Routing.RegisterRoute(nameof(AdvancedPage), typeof(AdvancedPage));
             Routing.RegisterRoute(nameof(DetailPage), typeof(DetailPage));
+            Routing.RegisterRoute(nameof(SongListPage), typeof(SongListPage));
+            Routing.RegisterRoute(nameof(SelectCollectionPage), typeof(SelectCollectionPage));
         }
 
     }
